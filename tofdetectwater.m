@@ -10,9 +10,16 @@ dpfs_data = dpfs_mat_select.VarName1;       %选择列
 length = size(dpfs_data);
 win_size = 500;
 
+n = 0:win_size; % 采样序列
+
 for i = 1:win_size:length-win_size
     y= fft(dpfs_data(i:i+win_size)); %fft计算
     M = abs(y);         %求信号幅度 列向量 ，频率从小到大递增
+
+    sum_result= sum(M(400:500))/10000;
+    for a = i:i+win_size
+        value(a)=sum_result;       
+    end
 
     if M(499) > 500
        for a = i:i+win_size
@@ -29,6 +36,8 @@ figure
 plot(dpfs_data)
 hold on
 plot(result)
+hold on
+plot(value)
 
 % figure
 
