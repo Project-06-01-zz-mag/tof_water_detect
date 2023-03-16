@@ -4,16 +4,16 @@ close all
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global win_size frequency_spectrum_x1 frequency_spectrum_x2 scale sum_value_limit water_cnt step_size water_cnt_limit figure_row figure_column% 原始信号进行fft的窗口大小
-win_size = 500;  % 原始信号进行fft的窗口大小
-frequency_spectrum_x1 = win_size - 100 %信号频率窗口下边界
-frequency_spectrum_x2 = win_size - 50 %信号频率窗口上边界
-scale = 1000        %fft信号幅值求和后的缩放
-sum_value_limit = 3 %信号求和后认为是水面的信号和限值
-water_cnt = 0 ;     %判断可能出现在水面上的次数
+win_size = 100;  % 原始信号进行fft的窗口大小
+frequency_spectrum_x1 = win_size - 50 %信号频率窗口下边界
+frequency_spectrum_x2 = win_size - 10 %信号频率窗口上边界
+scale = 100         %fft信号幅值求和后的缩放
+sum_value_limit = 2  %信号求和后认为是水面的信号和限值
+water_cnt_limit = 5  % 连续判断是否在水面上的次数
+water_cnt = 0 ;      %判断可能出现在水面上的次数
 step_size = 100      % 步进长度
-water_cnt_limit = 3 % 连续判断是否在水面上的次数
-figure_row = 3      % 绘图的row numble
-figure_column = 1   % 绘图的column numble
+figure_row = 3       % 绘图的row numble
+figure_column = 1    % 绘图的column numble
 figure
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -43,11 +43,20 @@ function myFun(inputdata,figure_num)
     
     global win_size frequency_spectrum_x1 frequency_spectrum_x2 scale sum_value_limit water_cnt step_size water_cnt_limit figure_row figure_column% 原始信号进行fft的窗口大小
     length = size(inputdata);
+
     for i = 2:length
-        if (inputdata(i) < (-80)||inputdata(i) ==0)
+        if (inputdata(i) < (-60)||inputdata(i) ==0)
             inputdata(i) = inputdata(i-1);
         end
     end 
+
+    % for i = 2:length
+    %     if (abs(inputdata(i-1) - inputdata(i))> 20)
+    %         inputdata(i) = inputdata(i-1);
+    %     end
+    % end 
+
+
 
     for i = win_size+1:step_size:length-win_size
         y= fft(inputdata(i-win_size:i)); %fft计算
