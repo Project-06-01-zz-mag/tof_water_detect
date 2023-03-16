@@ -25,6 +25,14 @@ subplot(2,1,1)
 plot(dpfs_data)
 hold on
 
+Fs=1000;
+Fs2=Fs/2;
+[b,a]=butter(4,50/Fs2,'high');
+y=filter(b,a,dpfs_data);%经过filter滤波之后得到的数据y则是经过带通滤波后的信号数据
+subplot(2,1,2)
+plot(y)
+hold on
+
 for i = 1:win_size:length-win_size
     y= fft(dpfs_data(i:i+win_size)); %fft计算
     M = abs(y);         %求信号幅度 列向量 ，频率从小到大递增
