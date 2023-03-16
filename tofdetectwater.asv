@@ -2,39 +2,40 @@ clc
 clear
 close all
 
-
-frequency_spectrum_x1 = 400
-frequency_spectrum_x2 = 500
-
-scale = 1000
+frequency_spectrum_x1 = 400 %信号频率窗口下边界
+frequency_spectrum_x2 = 500 %信号频率窗口上边界
+scale = 1000 %fft信号幅值求和后的缩放
 
 figure_row = 3
 figure_column = 1
 
-dpfs_mat_load = load('rawdpfs_ground1.mat');     %载入mat数据
+dpfs_mat_load = load('rawdpfs_ground1.mat');   %载入mat数据
 dpfs_mat_select=dpfs_mat_load.rawdpfsground1;  %选择mat
-dpfs_data = dpfs_mat_select.VarName1;       %选择列
-
-length = size(dpfs_data);
-
-win_size = 500;
-n = 0:win_size; % 采样序列
+dpfs_data = dpfs_mat_select.VarName1;          %选择列
+length = size(dpfs_data);                      %求s原始信号的长度
 
 figure
 subplot(2,1,1)
-plot(dpfs_data)
+plot(dpfs_data)%原始的信号打印
 hold on
 
+%对原始信号进行脉冲噪声去噪
+for i = 2:length
+    if (dpfs_data(i) < (-80)||dpfs_data(i) ==0)
+        dpfs_data(i) = dpfs_data(i-1);
+    end
+end 
+
+%对原始信号进行中值滤波
+dpfs_data_filter = medfilt1(dpfs_data,100);
+
+win_size = 500; % 原始信号进行fft的窗口大小
+n = 0:win_size; % 采样序列
 for i = 1:win_size:length-win_size
     y= fft(dpfs_data(i:i+win_size)); %fft计算
-    M = abs(y);         %求信号幅度 列向量 ，频率从小到大递增
-    
-    for win_size
-        
-    subplot(2,1,2)
-    plot(n,M)
-    hold off
+    M = abs(y);         %求信号幅度 列向量 ，频率从小到大递增       
 
+    %对xuan
     sum_result= sum(M(frequency_spectrum_x1:frequency_spectrum_x2))/scale;
     for a = i:i+win_size
         value(a)=sum_result;       
@@ -60,13 +61,9 @@ hold on
 plot(value)
 hold on
 
-for i = 2:length
-    if (dpfs_data(i) < (-80)||dpfs_data(i) ==0)
-        dpfs_data(i) = dpfs_data(i-1);
-    end
-end 
 
-dpfs_data_filter = medfilt1(dpfs_data,100);
+
+
 
 for i = 1:win_size:length-win_size
     y= fft(dpfs_data(i:i+win_size)); %fft计算
