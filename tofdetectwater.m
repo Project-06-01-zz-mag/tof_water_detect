@@ -41,8 +41,8 @@ hold on
 plot(value)
 
 % tofampdpsfload = load('tofdpsf1.mat');
-dpfs_mat_load = load('rawdpfs_ground1.mat');     %载入mat数据
-dpfs_mat_select=dpfs_mat_load.rawdpfsground1;  %选择mat
+dpfs_mat_load = load('rawdpfs_water1.mat');     %载入mat数据
+dpfs_mat_select=dpfs_mat_load.rawdpfswater1;  %选择mat
 dpfs_data = dpfs_mat_select.VarName1;       %选择列
 
 length = size(dpfs_data);
