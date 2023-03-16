@@ -2,15 +2,15 @@ clc
 clear
 close all
 
-frequency_spectrum_x1 = 400 %信号频率窗口下边界
-frequency_spectrum_x2 = 500 %信号频率窗口上边界
-scale = 1000 %fft信号幅值求和后的缩放
-sum_value_limit = 6  %信号求和后认为是水面的信号和限值
+win_size = 100; % 原始信号进行fft的窗口大小
+frequency_spectrum_x1 = 50 %信号频率窗口下边界
+frequency_spectrum_x2 = 99 %信号频率窗口上边界
+scale = 100 %fft信号幅值求和后的缩放
+sum_value_limit = 10  %信号求和后认为是水面的信号和限值
 water_cnt = 0 ; %判断可能出现在水面上的次数
 water_cnt_limit = 3
 figure_row = 2
 figure_column = 1
-win_size = 500; % 原始信号进行fft的窗口大小
 
 dpfs_mat_load = load('rawdpfs_ground1.mat');   %载入mat数据
 dpfs_mat_select=dpfs_mat_load.rawdpfsground1;  %选择mat
@@ -19,7 +19,7 @@ length = size(dpfs_data);                      %求s原始信号的长度
 
 %对原始信号进行脉冲噪声去噪
 for i = 2:length
-    if (dpfs_data(i) < (-80)||dpfs_data(i) ==0)
+    if (dpfs_data(i) < (-80)||dpfs_data(i) == 0)
         dpfs_data(i) = dpfs_data(i-1);
     end
 end 
