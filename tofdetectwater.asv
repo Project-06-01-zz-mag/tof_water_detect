@@ -29,19 +29,7 @@ for i = 1:win_size:length-win_size
     y= fft(dpfs_data(i:i+win_size)); %fft计算
     M = abs(y);         %求信号幅度 列向量 ，频率从小到大递增
     
-    for a = 1:i
-        select(a) = 0;
-    end
-    for a = i:i+win_size
-        select(a) = -80;
-    end
-    select(a) = 0
-    
-    subplot(2,1,1)
-    plot(dpfs_data)
-    hold on
-    plot(select)
-    hold off
+    for win_size
         
     subplot(2,1,2)
     plot(n,M)
