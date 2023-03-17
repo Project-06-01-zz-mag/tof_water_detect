@@ -19,23 +19,22 @@ figure
 
 dpfs_mat_load = load('rawdpfs_ground1_origin.mat');   %载入mat数据
 dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
-%dpfs_data = dpfs_mat_select.VarName1;          %选择列
 myFun(dpfs_mat_select',1)
+title('辉哥自动上升log')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 dpfs_mat_load = load('rawdpfs_water1_origin.mat');   %载入mat数据
 dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
-% dpfs_data = dpfs_mat_select.VarName1;         %选择列
 myFun(dpfs_mat_select',2)
+title('辉哥水面log1')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 dpfs_mat_load = load('rawdpfs_water2_origin.mat');   %载入mat数据
 dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
-% dpfs_data = dpfs_mat_select.VarName1;         %选择列
 myFun(dpfs_mat_select',3)
-
+title('辉哥水面log2')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function myFun(inputdata,figure_num)
@@ -67,7 +66,7 @@ function myFun(inputdata,figure_num)
         y= fft(inputdata(i-win_size:i)); %fft计算
         M = abs(y);         %求信号幅度 列向量 ，频率从小到大递增       
         %对选定的频率范围进行求和
-        sum_result= sum(M(frequency_spectrum_x1:frequency_spectrum_x2))/scale;
+        sum_result= sum(M(frequency_spectrum_x1/2:frequency_spectrum_x2/2))/scale; %计算单侧频谱的频率阈和
         for a = i-win_size:i
             value(a)=sum_result;       
         end
