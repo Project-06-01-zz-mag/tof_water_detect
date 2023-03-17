@@ -4,11 +4,11 @@ close all
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global win_size frequency_spectrum_x1 frequency_spectrum_x2 scale sum_value_limit water_cnt step_size water_cnt_limit figure_row figure_column% 原始信号进行fft的窗口大小
-win_size = 100;  % 原始信号进行fft的窗口大小
-frequency_spectrum_x1 = win_size - 50 %信号频率窗口下边界
-frequency_spectrum_x2 = win_size - 10 %信号频率窗口上边界
+win_size = 300;  % 原始信号进行fft的窗口大小
+frequency_spectrum_x1 = win_size - 200 %信号频率窗口下边界
+frequency_spectrum_x2 = win_size - 50 %信号频率窗口上边界
 scale = 100         %fft信号幅值求和后的缩放
-sum_value_limit = 2  %信号求和后认为是水面的信号和限值
+sum_value_limit = 5  %信号求和后认为是水面的信号和限值
 water_cnt_limit = 5  % 连续判断是否在水面上的次数
 water_cnt = 0 ;      %判断可能出现在水面上的次数
 step_size = 100      % 步进长度
@@ -45,7 +45,7 @@ function myFun(inputdata,figure_num)
     length = size(inputdata);
 
     for i = 2:length
-        if (inputdata(i) < (-60)||inputdata(i) ==0)
+        if (inputdata(i) < (-60)||inputdata(i)>-13)
             inputdata(i) = inputdata(i-1);
         end
     end 
