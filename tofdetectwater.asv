@@ -18,23 +18,24 @@ figure
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 dpfs_mat_load = load('rawdpfs_ground1_origin.mat');   %载入mat数据
-dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
+dpfs_data=dpfs_mat_load.origindata;  %选择mat
 %dpfs_data = dpfs_mat_select.VarName1;          %选择列
-myFun(dpfs_mat_select',1)
+myFun(dpfs_data',1)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 dpfs_mat_load = load('rawdpfs_water1_origin.mat');   %载入mat数据
-dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
-% dpfs_data = dpfs_mat_select.VarName1;         %选择列
-myFun(dpfs_mat_select',2)
+dpfs_mat_select=dpfs_mat_load.rawdpfswater1;  %选择mat
+dpfs_data = dpfs_mat_select.VarName1;         %选择列
+myFun(dpfs_data,2)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-dpfs_mat_load = load('rawdpfs_water2_origin.mat');   %载入mat数据
-dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
-% dpfs_data = dpfs_mat_select.VarName1;         %选择列
-myFun(dpfs_mat_select',3)
+dpfs_mat_load = load('rawdpfs_water2.mat');   %载入mat数据
+dpfs_mat_select=dpfs_mat_load.rawdpfswater2;  %选择mat
+dpfs_data = dpfs_mat_select.VarName1;         %选择列
+
+myFun(dpfs_data,3)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -43,11 +44,11 @@ function myFun(inputdata,figure_num)
     global win_size frequency_spectrum_x1 frequency_spectrum_x2 scale sum_value_limit water_cnt step_size water_cnt_limit figure_row figure_column% 原始信号进行fft的窗口大小
     length = size(inputdata);
     
-%     j = 1
-%     for i=1:3:length
-%         origindata(j) = inputdata(i)
-%         j= j+1
-%     end
+    j = 1
+    for i=1:3:length
+        origindata(j) = inputdata(i)
+        j= j+1
+    end
 
     for i = 2:length
         if (inputdata(i) < (-60)||inputdata(i)>-13)
