@@ -5,12 +5,13 @@ close all
 global win_size step_size figure_row figure_column 
 global std_limit_value water_cnt_limit water_cnt 
 global b2 a2 %滤波器传递函数的系数
+
 % 系统参数
 win_size = 30;        % 原始信号进行fft的窗口大小
-step_size = 30        % 步进长度
+step_size = 1         % 步进长度
 figure_row = 3        % 绘图的row numble
 figure_column = 1     % 绘图的column numble
-std_limit_value = 8  % 判断是否为水面上的标准差阈值
+std_limit_value = 11  % 判断是否为水面上的标准差阈值
 water_cnt_limit = 3   % 判断是否为水面上的连续次数阈值
 water_cnt = 0 ;       % 判断可能出现在水面上的次数
 
@@ -61,11 +62,12 @@ function myFun(inputdata,figure_num)
 %         j= j+1
 %     end
 
-    % for i = 2:length
-    %     if (inputdata(i) < (-60)||inputdata(i)>-13)
-    %         inputdata(i) = inputdata(i-1);
-    %     end
-    % end 
+    %限幅滤波
+    for i = 2:length
+        if (inputdata(i) < (-80)||inputdata(i)>-13)
+            inputdata(i) = inputdata(i-1);
+        end
+    end 
 
     % for i = 2:length
     %     if (abs(inputdata(i-1) - inputdata(i))> 20)
@@ -81,8 +83,9 @@ function myFun(inputdata,figure_num)
 %             filter_data(k) = inputdata_filter_(a)
 %             k = k+1
 %         end
+        after_filter_data(i) = inputdata_filter_(31)
         
-        deviation = std(inputdata_filter_,'omitnan')
+        deviation = std(after_filter_data(i-win_size:i),'omitnan')
         result(i) = deviation
         if(deviation > std_limit_value)
             water_cnt = water_cnt +1;
@@ -97,10 +100,12 @@ function myFun(inputdata,figure_num)
          end        
     end
 
-    plot(inputdata)
+    plot(inputdata)  %滤波前的时域图
     hold on
-    plot(result)
+    plot(result)     %对应点的标准差图
     hold on
-    plot(water_flag)
+    plot(water_flag) %对应点是否在水面的标志位输出
+    hold on
+    plot(after_filter_data)
     hold on
 end
