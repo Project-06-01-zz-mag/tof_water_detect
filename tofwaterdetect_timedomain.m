@@ -29,16 +29,20 @@ Rp=1; Rs=30;
 [b2,a2]=butter(n,Wn,'high','s');
 %y=filter(b2,a2,dpfs_mat_select');%经过filter滤波之后得到的数据y则是经过带通滤波后的信号数据
 
-%数据导入处理
-dpfs_mat_load = load('rawdpfs_ground1_origin.mat');   %载入mat数据
-dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
-myFun(dpfs_mat_select',1)
-title('辉哥自动上升log')
+%四阶的巴特沃斯高通滤波
+Wc=2*10/Fs;                   %截止频率 10Hz
+[b2,a2]=butter(4,Wc,'high');  % 四阶的巴特沃斯高通滤波
 
-dpfs_mat_load = load('rawdpfs_water1_origin.mat');   %载入mat数据
-dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
-myFun(dpfs_mat_select',2)
-title('辉哥水面log1')
+%数据导入处理
+% dpfs_mat_load = load('rawdpfs_ground1_origin.mat');   %载入mat数据
+% dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
+% myFun(dpfs_mat_select',1)
+% title('辉哥自动上升log')
+
+% dpfs_mat_load = load('rawdpfs_water1_origin.mat');   %载入mat数据
+% dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
+% myFun(dpfs_mat_select',2)
+% title('辉哥水面log1')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
