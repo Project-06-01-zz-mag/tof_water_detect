@@ -9,9 +9,9 @@ global b2 a2 %滤波器传递函数的系数
 % 系统参数
 win_size = 30;        % 原始信号进行fft的窗口大小
 step_size = 1         % 步进长度
-figure_row = 3        % 绘图的row numble
+figure_row = 1        % 绘图的row numble
 figure_column = 1     % 绘图的column numble
-std_limit_value = 11  % 判断是否为水面上的标准差阈值
+std_limit_value = 1.7  % 判断是否为水面上的标准差阈值
 water_cnt_limit = 3   % 判断是否为水面上的连续次数阈值
 water_cnt = 0 ;       % 判断可能出现在水面上的次数
 
@@ -48,7 +48,7 @@ Wc=2*10/Fs;                   %截止频率 10Hz
 
 dpfs_mat_load = load('rawdpfs_water2_origin.mat');   %载入mat数据
 dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
-myFun(dpfs_mat_select',3)
+myFun(dpfs_mat_select',1)
 title('辉哥水面log2')
 
 
