@@ -9,9 +9,9 @@ global b2 a2 %滤波器传递函数的系数
 % 系统参数
 win_size = 30;        % 原始信号进行fft的窗口大小
 step_size = 1         % 步进长度
-figure_row = 3        % 绘图的row numble
+figure_row = 1        % 绘图的row numble
 figure_column = 1     % 绘图的column numble
-std_limit_value = 11  % 判断是否为水面上的标准差阈值
+std_limit_value = 0.7 % 判断是否为水面上的标准差阈值
 water_cnt_limit = 3   % 判断是否为水面上的连续次数阈值
 water_cnt = 0 ;       % 判断可能出现在水面上的次数
 
@@ -30,7 +30,8 @@ Rp=1; Rs=30;
 %y=filter(b2,a2,dpfs_mat_select');%经过filter滤波之后得到的数据y则是经过带通滤波后的信号数据
 
 %四阶的巴特沃斯高通滤波
-Wc=2*10/Fs;                   %截止频率 10Hz
+high_pass = 10
+Wc=2*high_pass/Fs;            % 截止频率 10Hz
 [b2,a2]=butter(4,Wc,'high');  % 四阶的巴特沃斯高通滤波
 
 %数据导入处理
@@ -48,7 +49,7 @@ Wc=2*10/Fs;                   %截止频率 10Hz
 
 dpfs_mat_load = load('rawdpfs_water2_origin.mat');   %载入mat数据
 dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
-myFun(dpfs_mat_select',3)
+myFun(dpfs_mat_select',1)
 title('辉哥水面log2')
 
 
@@ -59,7 +60,7 @@ function myFun(inputdata,figure_num)
     global std_limit_value water_cnt_limit water_cnt 
     global b2 a2 %滤波器传递函数的系数
 
-    length = size(inputdata);
+    length = size(inputdata,1);
 %     j = 1
 %     for i=1:3:length
 %         origindata(j) = inputdata(i)
@@ -82,14 +83,17 @@ function myFun(inputdata,figure_num)
     for i = win_size+1:step_size:length-win_size
         inputdata_filter_ = filter(b2,a2,inputdata(i-win_size:i));%经过filter滤波之后得到的数据y则是经过带通滤波后的信号数据
         
-%         k = i-win_size
-%         for a=1:win_size+1
-%             filter_data(k) = inputdata_filter_(a)
-%             k = k+1
-%         end
-        after_filter_data(i) = inputdata_filter_(31)
-        
-        deviation = std(after_filter_data(i-win_size:i),'omitnan')
+        bsort = sort(inputdata(i-win_size:i),"ascend");
+        a =abs(1/ (bsort(1) -(bsort(31) )))
+
+        if (a<0.1)
+            after_filter_data(i) = inputdata_filter_(31) * a
+            deviation = std(after_filter_data(i-win_size:i),'omitnan') * a
+        else
+            after_filter_data(i) = inputdata_filter_(31)
+            deviation = std(after_filter_data(i-win_size:i),'omitnan')
+        end 
+    
         result(i) = deviation
         if(deviation > std_limit_value)
             water_cnt = water_cnt +1;
@@ -110,6 +114,6 @@ function myFun(inputdata,figure_num)
     hold on
     plot(water_flag) %对应点是否在水面的标志位输出
     hold on
-    plot(after_filter_data)
+    plot(after_filter_data) %滤波后的数据
     hold on
 end
