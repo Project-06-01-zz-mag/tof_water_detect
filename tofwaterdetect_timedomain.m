@@ -11,8 +11,8 @@ win_size = 30;        % 原始信号进行fft的窗口大小
 step_size = 1         % 步进长度
 figure_row = 3        % 绘图的row numble
 figure_column = 1     % 绘图的column numble
-std_limit_value = 0.3 % 判断是否为水面上的标准差阈值
-water_cnt_limit = 2   % 判断是否为水面上的连续次数阈值
+std_limit_value = 0.09 % 判断是否为水面上的标准差阈值
+water_cnt_limit = 30   % 判断是否为水面上的连续次数阈值
 water_cnt = 0 ;       % 判断可能出现在水面上的次数
 
 %滤波器参数
@@ -120,7 +120,7 @@ function myFun(inputdata,figure_num)
     global std_limit_value water_cnt_limit water_cnt 
     global b2 a2 %滤波器传递函数的系数
 
-    length = size(inputdata,1)/2;
+    length = size(inputdata,1);
 %     j = 1
 %     for i=1:3:length
 %         origindata(j) = inputdata(i)
