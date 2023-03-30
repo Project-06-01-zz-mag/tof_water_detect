@@ -9,7 +9,7 @@ global b2 a2 %滤波器传递函数的系数
 % 系统参数
 win_size = 30;        % 原始信号进行fft的窗口大小
 step_size = 1         % 步进长度
-figure_row = 1        % 绘图的row numble
+figure_row = 3        % 绘图的row numble
 figure_column = 1     % 绘图的column numble
 std_limit_value = 0.3 % 判断是否为水面上的标准差阈值
 water_cnt_limit = 2   % 判断是否为水面上的连续次数阈值
@@ -34,25 +34,85 @@ high_pass = 10
 Wc=2*high_pass/Fs;            % 截止频率 10Hz
 [b2,a2]=butter(4,Wc,'high');  % 四阶的巴特沃斯高通滤波
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %数据导入处理
-% dpfs_mat_load = load('rawdpfs_ground1_origin.mat');   %载入mat数据
-% dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
-% myFun(dpfs_mat_select',1)
-% title('辉哥自动上升log')
+dpfs_mat_load = load('rawdpfs_ground1_origin.mat');   %载入mat数据
+dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
+
+raw_data = dpfs_mat_select'; %载入原始数据
+length = size(dpfs_mat_select',1);
+
+window_size = 11;
+window_data = zeros(window_size,1);
+Median_filter = zeros(length,1);
+
+for i = 1:length
+    if i <= window_size
+        Median_filter(i) = raw_data(i);
+        window_data(i) = raw_data(i);
+    else
+        window_data(1:window_size-1) = window_data(2:window_size);
+        window_data(window_size) = raw_data(i);
+        Median_filter(i) = GetMedianNum(window_data,window_size);
+    end
+end
+
+myFun(Median_filter,1)
+title('辉哥自动上升log')
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % dpfs_mat_load = load('rawdpfs_water1_origin.mat');   %载入mat数据
 % dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
-% myFun(dpfs_mat_select',2)
+
+% raw_data = dpfs_mat_select'; %载入原始数据
+% length = size(dpfs_mat_select',1);
+
+% window_size = 11;
+% window_data = zeros(window_size,1);
+% Median_filter = zeros(length,1);
+
+% for i = 1:length
+%     if i <= window_size
+%         Median_filter(i) = raw_data(i);
+%         window_data(i) = raw_data(i);
+%     else
+%         window_data(1:window_size-1) = window_data(2:window_size);
+%         window_data(window_size) = raw_data(i);
+%         Median_filter(i) = GetMedianNum(window_data,window_size);
+%     end
+% end
+
+% myFun(Median_filter,2)
 % title('辉哥水面log1')
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 dpfs_mat_load = load('rawdpfs_water2_origin.mat');   %载入mat数据
 dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
-myFun(dpfs_mat_select',1)
+
+raw_data = dpfs_mat_select'; %载入原始数据
+length = size(dpfs_mat_select',1);
+
+window_size = 11;
+window_data = zeros(window_size,1);
+Median_filter = zeros(length,1);
+
+for i = 1:length
+    if i <= window_size
+        Median_filter(i) = raw_data(i);
+        window_data(i) = raw_data(i);
+    else
+        window_data(1:window_size-1) = window_data(2:window_size);
+        window_data(window_size) = raw_data(i);
+        Median_filter(i) = GetMedianNum(window_data,window_size);
+    end
+end
+
+myFun(Median_filter,3)
 title('辉哥水面log2')
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %数据处理函数
 function myFun(inputdata,figure_num)
     
@@ -60,7 +120,7 @@ function myFun(inputdata,figure_num)
     global std_limit_value water_cnt_limit water_cnt 
     global b2 a2 %滤波器传递函数的系数
 
-    length = size(inputdata,1);
+    length = size(inputdata,1)/2;
 %     j = 1
 %     for i=1:3:length
 %         origindata(j) = inputdata(i)
@@ -117,3 +177,13 @@ function myFun(inputdata,figure_num)
     plot(after_filter_data) %滤波后的数据
     hold on
 end
+
+%滑动中值滤波
+function mid_data = GetMedianNum(bArray,window_size)
+    bsort = sort(bArray,"ascend");
+    if mod(window_size , 2) ~= 0
+        mid_data = bsort((window_size+1) / 2);
+    else
+        mid_data = (bsort(window_size/2) + bsort(window_size/2+1)) / 2;
+    end
+    end

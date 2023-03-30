@@ -2,7 +2,7 @@ clc
 clear
 close all
 
-dpfs_mat_load = load('rawdpfs_water2_origin.mat');   
+dpfs_mat_load = load('rawdpfs_ground1_origin.mat');   
 dpfs_mat_select=dpfs_mat_load.origindata; 
 length = size(dpfs_mat_select',1);
 raw_data = dpfs_mat_select'; %载入原始数据
