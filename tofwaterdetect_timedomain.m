@@ -34,31 +34,31 @@ high_pass = 10
 Wc=2*high_pass/Fs;            % 截止频率 10Hz
 [b2,a2]=butter(4,Wc,'high');  % 四阶的巴特沃斯高通滤波
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%数据导入处理
-% dpfs_mat_load = load('truesensordata/rawdpfs_ground1_origin.mat');   %载入mat数据
-% dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 数据导入处理
+dpfs_mat_load = load('truesensordata/rawdpfs_ground1_origin.mat');   %载入mat数据
+dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
 
-% raw_data = dpfs_mat_select'; %载入原始数据
-% length = size(dpfs_mat_select',1);
+raw_data = dpfs_mat_select'; %载入原始数据
+length = size(dpfs_mat_select',1);
 
-% window_size = 11;
-% window_data = zeros(window_size,1);
-% Median_filter = zeros(length,1);
+window_size = 11;
+window_data = zeros(window_size,1);
+Median_filter = zeros(length,1);
 
-% for i = 1:length
-%     if i <= window_size
-%         Median_filter(i) = raw_data(i);
-%         window_data(i) = raw_data(i);
-%     else
-%         window_data(1:window_size-1) = window_data(2:window_size);
-%         window_data(window_size) = raw_data(i);
-%         Median_filter(i) = GetMedianNum(window_data,window_size);
-%     end
-% end
+for i = 1:length
+    if i <= window_size
+        Median_filter(i) = raw_data(i);
+        window_data(i) = raw_data(i);
+    else
+        window_data(1:window_size-1) = window_data(2:window_size);
+        window_data(window_size) = raw_data(i);
+        Median_filter(i) = GetMedianNum(window_data,window_size);
+    end
+end
 
-% myFun(Median_filter,1)
-% title('辉哥自动上升log')
+myFun(Median_filter,1)
+title('辉哥自动上升log')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -129,7 +129,7 @@ function myFun(inputdata,figure_num)
 
     %限幅滤波
     for i = 2:length
-        if (inputdata(i) < (-80)||inputdata(i)>-13)
+        if (inputdata(i) < (-70)||inputdata(i)>-13)
             inputdata(i) = inputdata(i-1);
         end
     end 
