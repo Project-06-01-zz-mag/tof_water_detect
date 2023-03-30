@@ -36,33 +36,33 @@ Wc=2*high_pass/Fs;            % 截止频率 10Hz
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %数据导入处理
-dpfs_mat_load = load('rawdpfs_ground1_origin.mat');   %载入mat数据
-dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
+% dpfs_mat_load = load('truesensordata/rawdpfs_ground1_origin.mat');   %载入mat数据
+% dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
 
-raw_data = dpfs_mat_select'; %载入原始数据
-length = size(dpfs_mat_select',1);
+% raw_data = dpfs_mat_select'; %载入原始数据
+% length = size(dpfs_mat_select',1);
 
-window_size = 11;
-window_data = zeros(window_size,1);
-Median_filter = zeros(length,1);
+% window_size = 11;
+% window_data = zeros(window_size,1);
+% Median_filter = zeros(length,1);
 
-for i = 1:length
-    if i <= window_size
-        Median_filter(i) = raw_data(i);
-        window_data(i) = raw_data(i);
-    else
-        window_data(1:window_size-1) = window_data(2:window_size);
-        window_data(window_size) = raw_data(i);
-        Median_filter(i) = GetMedianNum(window_data,window_size);
-    end
-end
+% for i = 1:length
+%     if i <= window_size
+%         Median_filter(i) = raw_data(i);
+%         window_data(i) = raw_data(i);
+%     else
+%         window_data(1:window_size-1) = window_data(2:window_size);
+%         window_data(window_size) = raw_data(i);
+%         Median_filter(i) = GetMedianNum(window_data,window_size);
+%     end
+% end
 
-myFun(Median_filter,1)
-title('辉哥自动上升log')
+% myFun(Median_filter,1)
+% title('辉哥自动上升log')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% dpfs_mat_load = load('rawdpfs_water1_origin.mat');   %载入mat数据
+% dpfs_mat_load = load('truesensordata/rawdpfs_water1_origin.mat');   %载入mat数据
 % dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
 
 % raw_data = dpfs_mat_select'; %载入原始数据
@@ -88,7 +88,7 @@ title('辉哥自动上升log')
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-dpfs_mat_load = load('rawdpfs_water2_origin.mat');   %载入mat数据
+dpfs_mat_load = load('truesensordata/rawdpfs_water2_origin.mat');   %载入mat数据
 dpfs_mat_select=dpfs_mat_load.origindata;  %选择mat
 
 raw_data = dpfs_mat_select'; %载入原始数据
