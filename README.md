@@ -1,11 +1,23 @@
 # tofdetectwater
-é€šè¿‡tofä¿¡å·å¼ºåº¦çš„å˜åŒ–æ¥åˆ¤æ–­é£žæœºæ˜¯å¦åœ¨æ°´é¢ä¸Š
-ä¸Šè¿°é¡¹ç›®ä½¿ç”¨matlabè¿›è¡Œä»¿çœŸï¼ŒéªŒè¯æ–¹æ¡ˆçš„å¯è¡Œæ€§
+Í¨¹ýtofÐÅºÅÇ¿¶ÈµÄ±ä»¯À´ÅÐ¶Ï·É»úÊÇ·ñÔÚË®ÃæÉÏ
+ÉÏÊöÏîÄ¿Ê¹ÓÃmatlab½øÐÐ·ÂÕæ£¬ÑéÖ¤·½°¸µÄ¿ÉÐÐÐÔ
 
-#å…³äºŽå¦‚ä½•ä»Žcsvæ–‡ä»¶è½¬æ¢æ—¶é—´åºåˆ—åˆ°matlabè¿›è¡Œåˆ†æž
-1ã€ä½¿ç”¨ksté€‰æ‹©ä¸€ç»„æƒ³è¦ä¿å­˜çš„æ—¶é—´åºåˆ—ï¼Œæ¯”å¦‚sensor.tof.dpfs ï¼ˆä¿å­˜çš„åç§°ç»Ÿä¸€ä¸ºtofdpfsï¼‰
-2ã€æ‰“å¼€tofdpfsï¼Œåˆ é™¤ç¬¬ä¸€è¡Œåç§°
-3ã€ä½¿ç”¨matlabå¯¼å…¥æ•°æ®ï¼Œåœ¨å·¥ä½œåŒºé‡Œé¢æ‰¾åˆ°å¯¼å…¥çš„æ•°æ®å¹¶è¿›è¡Œä¿å­˜ï¼Œä¿å­˜åç§°ä¸ºå®žé™…åœºæ™¯
-4ã€ä½¿ç”¨ç±»ä¼¼ä¸‹é¢çš„è¯­å¥è¿›è¡Œå¯¼å…¥ï¼Œæœ€ç»ˆå¾—åˆ°çš„æ—¶é—´åºåˆ—å°±æ˜¯data_load_var
+#¹ØÓÚÈçºÎ´ÓcsvÎÄ¼þ×ª»»Ê±¼äÐòÁÐµ½matlab½øÐÐ·ÖÎö
+1¡¢Ê¹ÓÃkstÑ¡ÔñÒ»×éÏëÒª±£´æµÄÊ±¼äÐòÁÐ£¬±ÈÈçsensor.tof.dpfs £¨±£´æµÄÃû³ÆÍ³Ò»Îªtofdpfs£©
+2¡¢´ò¿ªtofdpfs£¬É¾³ýµÚÒ»ÐÐÃû³Æ
+3¡¢Ê¹ÓÃmatlabµ¼ÈëÊý¾Ý£¬ÔÚ¹¤×÷ÇøÀïÃæÕÒµ½µ¼ÈëµÄÊý¾Ý²¢½øÐÐ±£´æ£¬±£´æÃû³ÆÎªÊµ¼Ê³¡¾°
+4¡¢Ê¹ÓÃÀàËÆÏÂÃæµÄÓï¾ä½øÐÐµ¼Èë£¬×îÖÕµÃµ½µÄÊ±¼äÐòÁÐ¾ÍÊÇdata_load_var
 data_load = load('origindata/rawdpfs_grass.mat');  
 data_load_var = dpfs_mat_struct_load.tofdpfs.VarName1;
+
+# ÎÄµµÄ¿Â¼ËµÃ÷
+0 Ô­Ê¼Êý¾Ý£¬À´×Ôreplay¹¤¾ßµ¼³öµÄÊý¾Ý£¬¸ù¾Ý½Å±¾¿ÉÒÔÉèÖÃ1s/1000point,1s/100point,ºóÃæ¿ÉÒÔÐÞ¸Ä³É1s/33point
+
+1 ÕæÊµÊý¾Ý£¬´ÓÔ­Ê¼Êý¾Ý³éÑù¶øÀ´£¬Ò²¿ÉÒÔÊÇreplay½Å±¾Ö±½Ó½µ²ÉÑùµ½33hz
+  ÎªÊ²Ã´ÊÇ33hz,ÒòÎªtofµÄÊý¾ÝÊÇ33hzµÄ£¬ËùÒÔÊµÊ±·ÂÕæµÄÊ±ºò£¬Ó¦¸Ã»¹Ô­×î³õµÄÊý¾Ý×´Ì¬
+
+2 ¹¤¾ß½Å±¾£¬Ò»Ð©matlabÄÚÖÃº¯ÊýµÄÑéÖ¤£¬±ÈÈçfft£¬filterµÈ£¬»¹ÓÐ½µ²ÉÑùµÄ½Å±¾
+
+3 ÑéÖ¤½Å±¾£¬Ëã·¨µÄÑéÖ¤½Å±¾£¬ÒýÈëÕæÊµÊý¾Ý£¬½øÐÐÑéÖ¤
+
+4 picture ,Ëã·¨ÑéÖ¤µÄÍ¼Æ¬±£´æ
