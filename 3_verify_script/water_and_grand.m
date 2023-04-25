@@ -7,8 +7,8 @@ win_size = 30;
 step_size = 2 
 figure_row = 3  
 figure_column =1
-time_begin = 12500
-time_end = 13683
+time_begin = 5000
+time_end = 5500
 
 %ÂË²¨Æ÷²ÎÊý
 Fs = 33
@@ -21,8 +21,8 @@ scale_value = 10
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-dpfs_mat_struct_load = load('origindata/rawdpfs_grass.mat');  
-dpfs_mat_select_grass = dpfs_mat_struct_load.rawdpfsgarss.VarName1;
+dpfs_mat_struct_load = load('1_truesensordata/rawdpfs_grass.mat');  
+dpfs_mat_select_grass = dpfs_mat_struct_load.truedata;
 
 % length = size(dpfs_mat_select_grass,1)
         
