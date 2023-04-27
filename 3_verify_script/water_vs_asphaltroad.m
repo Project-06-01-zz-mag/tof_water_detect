@@ -20,11 +20,25 @@ close all
 % picture_location = 3
 % myFun(dpfs_mat_select_water,picture_location,time_begin_hebian,time_begin_hebian+1000)
 
-dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_Asphaltroad.mat');   
+% dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_Asphaltroad.mat');   
+% dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
+% length_raw = size(dpfs_mat_select_water',1)
+% picture_location = 1
+% myFun(dpfs_mat_select_water',picture_location,50,150)
+
+% dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_watertest1.mat');   
+% dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
+% length_raw = size(dpfs_mat_select_water',1)
+% picture_location = 2
+% myFun(dpfs_mat_select_water',picture_location,5,50)
+
+dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_watertest2.mat');   
 dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
 length_raw = size(dpfs_mat_select_water',1)
 picture_location = 2
-myFun(dpfs_mat_select_water',picture_location,20,25)
+myFun(dpfs_mat_select_water',picture_location,5,50)
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %数据处理函数
 function myFun(inputdata,figure_num,time_begin_s,time_end_s)
@@ -49,11 +63,11 @@ function myFun(inputdata,figure_num,time_begin_s,time_end_s)
     result2_count_threshold = 33     %超过阈值的次数
 
     length = size(inputdata,1); % 获取输入数据的长度
-    for i = 2:length            % 限幅滤波
-        if (inputdata(i) < (-70)||inputdata(i)>-13)
-            inputdata(i) = inputdata(i-1);
-        end
-    end 
+    % for i = 2:length            % 限幅滤波
+    %     if (inputdata(i) < (-70)||inputdata(i)>-13)
+    %         inputdata(i) = inputdata(i-1);
+    %     end
+    % end 
 
     time_begin = time_begin_s / (1/33) - win_size
     time_end = time_end_s/ (1/33) + win_size
