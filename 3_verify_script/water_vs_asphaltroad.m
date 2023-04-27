@@ -8,17 +8,24 @@ close all
 % picture_location = 1
 % myFun(dpfs_mat_select_water,picture_location,time_begin_hebian,time_begin_hebian+1000)
 
-dpfs_mat_struct_load = load('1_truesensordata/rawdpfs_grass.mat');   
-dpfs_mat_select_water = dpfs_mat_struct_load.truedata;
-time_begin_hebian = 1000
-picture_location = 2
-myFun(dpfs_mat_select_water,picture_location,time_begin_hebian,time_begin_hebian+5000)
+% dpfs_mat_struct_load = load('1_truesensordata/rawdpfs_grass.mat');   
+% dpfs_mat_select_water = dpfs_mat_struct_load.truedata;
+% time_begin_hebian = 1000
+% picture_location = 2
+% myFun(dpfs_mat_select_water,picture_location,time_begin_hebian,time_begin_hebian+5000)
 
 % dpfs_mat_struct_load = load('1_truesensordata/rawdpfs_water2_origin.mat');   
 % dpfs_mat_select_water = dpfs_mat_struct_load.origindata;
 % time_begin_hebian = 200
 % picture_location = 3
 % myFun(dpfs_mat_select_water,picture_location,time_begin_hebian,time_begin_hebian+1000)
+
+dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_Asphaltroad.mat');   
+dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
+length_raw = size(dpfs_mat_select_water',1)
+time_begin_hebian = 1000
+picture_location = 2
+myFun(dpfs_mat_select_water',picture_location,time_begin_hebian,length_raw-time_begin_hebian)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %数据处理函数
