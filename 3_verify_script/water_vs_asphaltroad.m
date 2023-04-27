@@ -23,14 +23,11 @@ close all
 dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_Asphaltroad.mat');   
 dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
 length_raw = size(dpfs_mat_select_water',1)
-time_begin_hebian = 1000
 picture_location = 2
-myFun(dpfs_mat_select_water',picture_location,time_begin_hebian,length_raw-time_begin_hebian)
-
+myFun(dpfs_mat_select_water',picture_location,20,25)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %数据处理函数
-function myFun(inputdata,figure_num,time_begin,time_end)
-
+function myFun(inputdata,figure_num,time_begin_s,time_end_s)
     win_size = 30;  
     step_size = 2 
     figure_row = 3  
@@ -57,6 +54,9 @@ function myFun(inputdata,figure_num,time_begin,time_end)
             inputdata(i) = inputdata(i-1);
         end
     end 
+
+    time_begin = time_begin_s / (1/33) - win_size
+    time_end = time_end_s/ (1/33) + win_size
 
     for i = win_size+time_begin:step_size:time_end-win_size
         inputdata_filter_ = filter(b2,a2,inputdata(i-win_size:i));%经过filter滤波之后得到的数据y则是经过带通滤波后的信号数据
@@ -115,15 +115,28 @@ function myFun(inputdata,figure_num,time_begin,time_end)
         end
     end
 
+
+    samplingrate = 33
+    time_all = length/samplingrate 
+    time=0:1/samplingrate:time_all-1/samplingrate
+
     subplot(figure_row,figure_column,figure_num)
-    plot(inputdata)  %滤波前的时域图
+    plot(time,inputdata)  %滤波前的时域图
     hold on
-    plot(after_filter_data,'k') %滤波后的数据
+    
+    sizetimeview = size(after_filter_data,2)   %重新计算时间序列
+    time_all2 = sizetimeview/samplingrate 
+    timeview=0:1/samplingrate:time_all2-1/samplingrate
+    plot(timeview,after_filter_data','k') %滤波后的数据
     hold on
-    plot(result,'r')    
+    plot(timeview,result,'r')    
     hold on
-    plot(result2,'g')
+    plot(timeview,result2,'g')
     hold on
-    plot(result3)
+    plot(timeview,result3)
     hold on
+
+    title('Asphalt road')
+    xlabel('time(s)')
+    ylabel('dpfs(lg(amp))')
 end
