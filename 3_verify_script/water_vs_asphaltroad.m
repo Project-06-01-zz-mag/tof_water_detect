@@ -2,49 +2,43 @@ clc
 clear
 close all
 
-% dpfs_mat_struct_load = load('1_truesensordata/rawdpfs_water1_origin.mat');   
-% dpfs_mat_select_water = dpfs_mat_struct_load.origindata;
-% time_begin_hebian = 6647
-% picture_location = 1
-% myFun(dpfs_mat_select_water,picture_location,time_begin_hebian,time_begin_hebian+1000)
+global win_size result2_value_threshold result2_count_threshold
 
-% dpfs_mat_struct_load = load('1_truesensordata/rawdpfs_grass.mat');   
-% dpfs_mat_select_water = dpfs_mat_struct_load.truedata;
-% time_begin_hebian = 1000
-% picture_location = 2
-% myFun(dpfs_mat_select_water,picture_location,time_begin_hebian,time_begin_hebian+5000)
-
-% dpfs_mat_struct_load = load('1_truesensordata/rawdpfs_water2_origin.mat');   
-% dpfs_mat_select_water = dpfs_mat_struct_load.origindata;
-% time_begin_hebian = 200
-% picture_location = 3
-% myFun(dpfs_mat_select_water,picture_location,time_begin_hebian,time_begin_hebian+1000)
+win_size = 30;  
+result2_value_threshold = 5      %二次标准差的阈值
+result2_count_threshold = 33     %超过阈值的次数
 
 dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_Asphaltroad.mat');   
 dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
 length_raw = size(dpfs_mat_select_water',1)
 picture_location_row = 1
 picture_location = 1
-myFun(dpfs_mat_select_water',picture_location_row,picture_location,50,150)
-title('Asphalt road')
+myFun(dpfs_mat_select_water',picture_location_row,picture_location,2,170)
+title(['Asphalt road,win=',num2str(win_size),',value threshold=',num2str(result2_value_threshold),',count threshold=',num2str(result2_count_threshold)])
 
-% dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_watertest1.mat');   
-% dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
-% length_raw = size(dpfs_mat_select_water',1)
-% picture_location = 2
-% myFun(dpfs_mat_select_water',picture_location,5,50)
+dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_watertest1.mat');   
+dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
+length_raw = size(dpfs_mat_select_water',1)
+picture_location_row = 1
+picture_location = 2
+myFun(dpfs_mat_select_water',picture_location_row,picture_location,2,49)
+title(['watet test 1,win=',num2str(win_size),',value threshold=',num2str(result2_value_threshold),',count threshold=',num2str(result2_count_threshold)])
 
-% dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_watertest2.mat');   
-% dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
-% length_raw = size(dpfs_mat_select_water',1)
-% picture_location = 2
-% myFun(dpfs_mat_select_water',picture_location,5,50)
+dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_watertest2.mat');   
+dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
+length_raw = size(dpfs_mat_select_water',1)
+picture_location_row = 1
+picture_location = 3
+myFun(dpfs_mat_select_water',picture_location_row,picture_location,2,80)
+title(['watet test 2,win=',num2str(win_size),',value threshold=',num2str(result2_value_threshold),',count threshold=',num2str(result2_count_threshold)])
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %数据处理函数
 function myFun(inputdata,figure_row,figure_num,time_begin_s,time_end_s)
-    win_size = 30;  
+    global win_size result2_value_threshold result2_count_threshold
+
     step_size = 2 
     % figure_row = 1  
     figure_column =1
@@ -60,16 +54,18 @@ function myFun(inputdata,figure_row,figure_num,time_begin_s,time_end_s)
     count = 0       % 极值个数阈值
     count1 = 100    % 反极值个数阈值
 
-    result2_value_threshold = 5      %二次标准差的阈值
+    % result2_value_threshold = 5      %二次标准差的阈值
     result2_over_threshold_count_now = 0 %二次标准差的超阈值次数
-    result2_count_threshold = 33     %超过阈值的次数
+    % result2_count_threshold = 33     %超过阈值的次数
 
     length = size(inputdata,1); % 获取输入数据的长度
     samplingrate = 33
     time_all = length/samplingrate 
     time=0:1/samplingrate:time_all-1/samplingrate
 
-    subplot(figure_row,figure_column,figure_num)
+    
+    figure(figure_num)
+    % subplot(figure_row,figure_column,figure_num)
     plot(time,inputdata)  %滤波前的时域图
     hold on
     for i = 2:length            % 限幅滤波
@@ -89,34 +85,6 @@ function myFun(inputdata,figure_row,figure_num,time_begin_s,time_end_s)
         
         bsort = sort(inputdata(i-win_size:i),"ascend");
         a =abs(1/ (bsort(1) -(bsort(win_size+1))))
-
-        % if (a<0.1)
-        %     count = count + 1
-        % else
-        %     count = 0
-        % end
-    
-        % if(count > 100)
-        %     b = 1;
-        % end
-    
-        % if(b == 1)
-        %     a = 1
-        %     count1 = count1 - 1 
-        % end
-    
-        % if (count1 == 0)
-        %     b = 0;
-        %     count1 = 100;
-        % end
-
-        % if (a<0.1)
-        %     after_filter_data(i) = inputdata_filter_(win_size+1)
-        %     deviation = std(after_filter_data(i-win_size:i),'omitnan') * a
-        % else
-        %     after_filter_data(i) = inputdata_filter_(win_size+1)
-        %     deviation = std(after_filter_data(i-win_size:i),'omitnan')
-        % end 
     
         after_filter_data(i) = inputdata_filter_(win_size+1)
         deviation = std(after_filter_data(i-win_size:i),'omitnan')
@@ -146,14 +114,17 @@ function myFun(inputdata,figure_row,figure_num,time_begin_s,time_end_s)
     timeview=0:1/samplingrate:time_all2-1/samplingrate
     plot(timeview,after_filter_data','k') %滤波后的数据
     hold on
-    plot(timeview,result,'r')    
+    plot(timeview,result,'r:')    
     hold on
-    plot(timeview,result2,'g')
+    plot(timeview,result2,'g.')
     hold on
     plot(timeview,result3)
     hold on
-
+    grid on
+    set(gca, 'XTick', 0:time_all/20:time_all);  %调整网格的大小
+    set(gca, 'YTick', -90:110/20:20); 
     xlabel('time(s)')
     ylabel('dpfs(lg(amp))')
-    legend('raw-data','Limit-amp-filter','Hps-filter','standard-deviation','Secondary-standard-deviation')
+    legend('raw-data','Limit-amp-filter','Hps-filter','standard-deviation','Secondary-standard-deviation','water flag')
+
 end
