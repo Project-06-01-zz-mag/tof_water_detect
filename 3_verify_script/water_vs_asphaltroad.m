@@ -20,11 +20,13 @@ close all
 % picture_location = 3
 % myFun(dpfs_mat_select_water,picture_location,time_begin_hebian,time_begin_hebian+1000)
 
-% dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_Asphaltroad.mat');   
-% dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
-% length_raw = size(dpfs_mat_select_water',1)
-% picture_location = 1
-% myFun(dpfs_mat_select_water',picture_location,50,150)
+dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_Asphaltroad.mat');   
+dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
+length_raw = size(dpfs_mat_select_water',1)
+picture_location_row = 1
+picture_location = 1
+myFun(dpfs_mat_select_water',picture_location_row,picture_location,50,150)
+title('Asphalt road')
 
 % dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_watertest1.mat');   
 % dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
@@ -32,19 +34,19 @@ close all
 % picture_location = 2
 % myFun(dpfs_mat_select_water',picture_location,5,50)
 
-dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_watertest2.mat');   
-dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
-length_raw = size(dpfs_mat_select_water',1)
-picture_location = 2
-myFun(dpfs_mat_select_water',picture_location,5,50)
+% dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_watertest2.mat');   
+% dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
+% length_raw = size(dpfs_mat_select_water',1)
+% picture_location = 2
+% myFun(dpfs_mat_select_water',picture_location,5,50)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %数据处理函数
-function myFun(inputdata,figure_num,time_begin_s,time_end_s)
+function myFun(inputdata,figure_row,figure_num,time_begin_s,time_end_s)
     win_size = 30;  
     step_size = 2 
-    figure_row = 3  
+    % figure_row = 1  
     figure_column =1
     scale_value =10 %结果缩放
 
@@ -63,11 +65,21 @@ function myFun(inputdata,figure_num,time_begin_s,time_end_s)
     result2_count_threshold = 33     %超过阈值的次数
 
     length = size(inputdata,1); % 获取输入数据的长度
-    % for i = 2:length            % 限幅滤波
-    %     if (inputdata(i) < (-70)||inputdata(i)>-13)
-    %         inputdata(i) = inputdata(i-1);
-    %     end
-    % end 
+    samplingrate = 33
+    time_all = length/samplingrate 
+    time=0:1/samplingrate:time_all-1/samplingrate
+
+    subplot(figure_row,figure_column,figure_num)
+    plot(time,inputdata)  %滤波前的时域图
+    hold on
+    for i = 2:length            % 限幅滤波
+        if (inputdata(i) < (-70)||inputdata(i)>-5)
+            inputdata(i) = inputdata(i-1);
+        end
+    end 
+
+    plot(time,inputdata)  %限幅滤波后的时域图
+    hold on
 
     time_begin = time_begin_s / (1/33) - win_size
     time_end = time_end_s/ (1/33) + win_size
@@ -129,15 +141,6 @@ function myFun(inputdata,figure_num,time_begin_s,time_end_s)
         end
     end
 
-
-    samplingrate = 33
-    time_all = length/samplingrate 
-    time=0:1/samplingrate:time_all-1/samplingrate
-
-    subplot(figure_row,figure_column,figure_num)
-    plot(time,inputdata)  %滤波前的时域图
-    hold on
-    
     sizetimeview = size(after_filter_data,2)   %重新计算时间序列
     time_all2 = sizetimeview/samplingrate 
     timeview=0:1/samplingrate:time_all2-1/samplingrate
@@ -150,7 +153,7 @@ function myFun(inputdata,figure_num,time_begin_s,time_end_s)
     plot(timeview,result3)
     hold on
 
-    title('Asphalt road')
     xlabel('time(s)')
     ylabel('dpfs(lg(amp))')
+    legend('raw-data','Limit-amp-filter','Hps-filter','standard-deviation','Secondary-standard-deviation')
 end
