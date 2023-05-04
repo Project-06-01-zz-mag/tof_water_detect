@@ -4,8 +4,8 @@ close all
 
 global win_size result2_value_threshold result2_count_threshold
 
-win_size = 30;  
-result2_value_threshold = 5      %二次标准差的阈值
+win_size = 60;  
+result2_value_threshold = 3.5      %二次标准差的阈值
 result2_count_threshold = 33     %超过阈值的次数
 
 dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_Asphaltroad.mat');   
