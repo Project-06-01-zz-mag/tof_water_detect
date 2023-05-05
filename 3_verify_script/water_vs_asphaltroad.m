@@ -8,29 +8,37 @@ win_size = 60;
 result2_value_threshold = 3.5      %二次标准差的阈值
 result2_count_threshold = 33     %超过阈值的次数
 
-dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_Asphaltroad.mat');   
+dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_Asphaltroad3.mat');   
 dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
 length_raw = size(dpfs_mat_select_water',1)
 picture_location_row = 1
 picture_location = 1
-myFun(dpfs_mat_select_water',picture_location_row,picture_location,2,170)
+myFun(dpfs_mat_select_water',picture_location_row,picture_location,2,420)
 title(['Asphalt road,win=',num2str(win_size),',value threshold=',num2str(result2_value_threshold),',count threshold=',num2str(result2_count_threshold)])
 
-dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_watertest1.mat');   
-dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
-length_raw = size(dpfs_mat_select_water',1)
-picture_location_row = 1
-picture_location = 2
-myFun(dpfs_mat_select_water',picture_location_row,picture_location,2,49)
-title(['watet test 1,win=',num2str(win_size),',value threshold=',num2str(result2_value_threshold),',count threshold=',num2str(result2_count_threshold)])
+% dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_Asphaltroad.mat');   
+% dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
+% length_raw = size(dpfs_mat_select_water',1)
+% picture_location_row = 1
+% picture_location = 1
+% myFun(dpfs_mat_select_water',picture_location_row,picture_location,2,170)
+% title(['Asphalt road,win=',num2str(win_size),',value threshold=',num2str(result2_value_threshold),',count threshold=',num2str(result2_count_threshold)])
 
-dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_watertest2.mat');   
-dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
-length_raw = size(dpfs_mat_select_water',1)
-picture_location_row = 1
-picture_location = 3
-myFun(dpfs_mat_select_water',picture_location_row,picture_location,2,80)
-title(['watet test 2,win=',num2str(win_size),',value threshold=',num2str(result2_value_threshold),',count threshold=',num2str(result2_count_threshold)])
+% dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_watertest1.mat');   
+% dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
+% length_raw = size(dpfs_mat_select_water',1)
+% picture_location_row = 1
+% picture_location = 2
+% myFun(dpfs_mat_select_water',picture_location_row,picture_location,2,49)
+% title(['watet test 1,win=',num2str(win_size),',value threshold=',num2str(result2_value_threshold),',count threshold=',num2str(result2_count_threshold)])
+
+% dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_watertest2.mat');   
+% dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
+% length_raw = size(dpfs_mat_select_water',1)
+% picture_location_row = 1
+% picture_location = 3
+% myFun(dpfs_mat_select_water',picture_location_row,picture_location,2,80)
+% title(['watet test 2,win=',num2str(win_size),',value threshold=',num2str(result2_value_threshold),',count threshold=',num2str(result2_count_threshold)])
 
 
 
