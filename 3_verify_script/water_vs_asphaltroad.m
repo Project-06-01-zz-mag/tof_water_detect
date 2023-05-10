@@ -13,7 +13,7 @@ dpfs_mat_select_water = dpfs_mat_struct_load.new_fpds;
 length_raw = size(dpfs_mat_select_water',1)
 picture_location_row = 1
 picture_location = 1
-myFun(dpfs_mat_select_water',picture_location_row,picture_location,2,420)
+myFun(dpfs_mat_select_water',picture_location_row,picture_location,2,10)
 title(['Asphalt road,win=',num2str(win_size),',value threshold=',num2str(result2_value_threshold),',count threshold=',num2str(result2_count_threshold)])
 
 % dpfs_mat_struct_load = load('4_rawdata_fromtime/truedata_fromtime_Asphaltroad.mat');   
@@ -56,7 +56,7 @@ function myFun(inputdata,figure_row,figure_num,time_begin_s,time_end_s)
     Fs = 33
     high_pass = 10
     Wc=2*high_pass/Fs;            % 截止频率 10Hz
-    [b2,a2]=butter(4,Wc,'high');  % 四阶的巴特沃斯高通滤波
+    [b2,a2]=butter(2,Wc,'high');  % 四阶的巴特沃斯高通滤波
 
     b = 0           % 控制极值缩放的开关
     count = 0       % 极值个数阈值
