@@ -44,6 +44,7 @@ end
 
 % ½á¹û»æÍ¼
 timeview = 1:length_end
+timeview = timeview*(1/500)
 subplot(4,1,1)
 plot(timeview,dspf_raw,'r') 
 xlabel('time(500point/s)')
