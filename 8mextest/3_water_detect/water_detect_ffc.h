@@ -1,6 +1,34 @@
 #pragma once
-
 #include "stdio.h"
+#include <cmath>
+
+#ifndef __int8_t_defined  
+# define __int8_t_defined  
+typedef signed char             int8_t;   
+typedef short int               int16_t;  
+typedef int                     int32_t;  
+# if __WORDSIZE == 64  
+typedef long int                int64_t;  
+# else  
+__extension__  
+typedef long long int           int64_t;  
+# endif  
+#endif  
+  
+  
+typedef unsigned char           uint8_t;  
+typedef unsigned short int      uint16_t;  
+#ifndef __uint32_t_defined  
+typedef unsigned int            uint32_t;  
+# define __uint32_t_defined  
+#endif  
+#if __WORDSIZE == 64  
+typedef unsigned long int       uint64_t;  
+#else  
+__extension__  
+typedef unsigned long long int  uint64_t;  
+#endif  
+
 /**
  * @brief General Digital Filter. Support no more than 10th orders.
  * @author Zhang Haiyang.
@@ -62,8 +90,8 @@ typedef struct waterdetectflag_s {
 float mean = 0;
 float variance = 0;
 float stdvariance = 0;
-bool waterflag = false;
 float hpf_dpfs;
+bool waterflag = false;
 bool fly_state_change = false;
 } waterdetectflag_t;
 
@@ -79,6 +107,5 @@ class water_detect
 public:
   waterdetectflag_t tof_water_detect(waterdetectrawdata_t *waterdetectrawdata);
 private:
-
-TofHpfFilter tofdpfsFilter_;
+  TofHpfFilter tofdpfsFilter_;
 };

@@ -1,5 +1,6 @@
-
 #include "water_detect_ffc.h"
+
+
 
 waterdetectflag_t water_detect::tof_water_detect(waterdetectrawdata_t *waterdetectrawdata) {
     static float dpfs_old = 0;
@@ -72,13 +73,11 @@ return waterdetectflag_temp;
 
 //时间  飞行状态  信号强度  水面识别结果
 //ffcprintf("tof_hpf %8.6f %d %8.6f %d\n", t, waterdetectrawdata_.fly_state_now,waterdetectrawdata_.dpfs_new,waterdetectflag_now.waterflag); // for matlab debug
-void ParseTof(Devices::mtTimestamp t, const Devices::mtRawRangefinder &raw, bool updated) {
+// void ParseTof(Devices::mtTimestamp t, const Devices::mtRawRangefinder &raw, bool updated) {
 
-    waterdetectrawdata_.fly_state_now = at_beginning_of_flying;
-    waterdetectrawdata_.dpfs_new = raw.attach_info.dpfs;
-    waterdetectflag_now = tof_water_detect(&waterdetectrawdata_);
-    ffcprintf("tof_hpf %8.6f %d %8.6f %d\n", t, waterdetectrawdata_.fly_state_now,waterdetectrawdata_.dpfs_new,waterdetectflag_now.waterflag); // for matlab debug
-    tof_.water_flag = waterdetectflag_now.waterflag;
-
-
-}
+//     waterdetectrawdata_.fly_state_now = at_beginning_of_flying;
+//     waterdetectrawdata_.dpfs_new = raw.attach_info.dpfs;
+//     waterdetectflag_now = tof_water_detect(&waterdetectrawdata_);
+//     ffcprintf("tof_hpf %8.6f %d %8.6f %d\n", t, waterdetectrawdata_.fly_state_now,waterdetectrawdata_.dpfs_new,waterdetectflag_now.waterflag); // for matlab debug
+//     tof_.water_flag = waterdetectflag_now.waterflag;
+// }
