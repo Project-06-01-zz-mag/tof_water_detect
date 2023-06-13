@@ -10,9 +10,8 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]) {
     waterdetectflag_t  waterdetectflag_output{};
     static waterdetectrawdata_t waterdetectrawdata_input{};
 
-    waterdetectrawdata_input.time_input = (double)mxGetScalar(prhs[0]);
-    waterdetectrawdata_input.fly_state_now = (bool)mxGetScalar(prhs[1]);
-    waterdetectrawdata_input.dpfs_new = (double)mxGetScalar(prhs[2]);
+    waterdetectrawdata_input.fly_state_now = (bool)mxGetScalar(prhs[0]);
+    waterdetectrawdata_input.dpfs_new = (double)mxGetScalar(prhs[1]);
 
     waterdetectflag_output = water_detect_.tof_water_detect(&waterdetectrawdata_input);
 

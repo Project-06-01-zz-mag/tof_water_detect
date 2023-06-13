@@ -21,7 +21,7 @@ water_flag_infly = ffc_log_struct.data(:,4);
 length = size(dpfs_new);
 
 for i = 1:length(1)
-    [mean_temp,variance_temp,stdvariance_temp,hpf_dpfs_temp,water_flag_inmatlab_temp,fly_state_change_temp] = water_detect(time_infact(i),fly_state_now(i),dpfs_new(i));
+    [mean_temp,variance_temp,stdvariance_temp,hpf_dpfs_temp,water_flag_inmatlab_temp,fly_state_change_temp] = water_detect(fly_state_now(i),dpfs_new(i));
     mean_arr(i) = mean_temp;
     variance_arr(i) = variance_temp;
     stdvariance_arr(i) = stdvariance_temp;
@@ -34,47 +34,29 @@ figure
 subplot(3,1,1)
 plot(time_infact,dpfs_new,'b') 
 xlabel('t(s)')
-ylabel('dpfs input')
+ylabel('dpfs')
+hold on
+plot(time_infact,hpf_dpfs_arr,'r')
+legend('dpfs滤波前','dpfs滤波后')
 
 subplot(3,1,2)
-plot(time_infact,hpf_dpfs_arr,'b')
-xlabel('t(s)')
-ylabel('hpf dpfs')
-
-subplot(3,1,3)
-plot(time_infact,waterdetectflag_output.fly_state_change,'r')
-xlabel('t(s)')
-ylabel('hpf dpfs')
-
-figure
-subplot(3,1,1)
-plot(time_infact,mean_arr,'b') 
-xlabel('t(s)')
-ylabel('mean')
-subplot(3,1,2)
-plot(time_infact,variance_arr,'b') 
-xlabel('t(s)')
-ylabel('variance')
-subplot(3,1,3)
 plot(time_infact,stdvariance_arr,'b') 
 hold on;
-limit = 0.3;
+limit = 0.5;
 for i= 1:length
     line_arr(i) = limit;
 end
 plot(time_infact,line_arr,'r') 
 xlabel('t(s)')
 ylabel('stdvariance')
+legend('实时标准差','标准差阈值')
 
-figure
-subplot(2,1,1)
+subplot(3,1,3)
 plot(time_infact,water_flag_infly,'b') 
+hold on
+plot(time_infact,water_flag_inmatlab_arr*0.5,'r') 
 xlabel('t(s)')
-ylabel('water flag infly')
-subplot(2,1,2)
-plot(time_infact,water_flag_inmatlab_arr,'b') 
-xlabel('t(s)')
-ylabel('water flag output')
+legend('优化前水面标志位','优化后水面标志位')
 
 %% 完全结束后释放内存
 clear water_detect
