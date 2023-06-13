@@ -83,7 +83,7 @@ class TofHpfFilter : public DigiFilterBase<float> {
 };
 
 #define WAT_WIN_SIZE 20
-#define STAND_DEV_VALUE_THRESHOLD 0.2
+#define STAND_DEV_VALUE_THRESHOLD 0.32
 #define WATER_CNT_THRESHOLD 30
 
 typedef struct waterdetectflag_s {

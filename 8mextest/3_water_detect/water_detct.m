@@ -1,4 +1,7 @@
-clc;clear;close
+clc
+clear all
+close all
+
 setenv('MW_MINGW64_LOC', 'C:\mingw-64')
 mex -setup C++
 %% 编译源文件，输出文件名为water_detect，扩展名基于平台，windows下为mexw64
@@ -15,24 +18,31 @@ dpfs_new = ffc_log_struct.data(:,3);
 water_flag_infly = ffc_log_struct.data(:,4);
 
 % 调用编译出的二进制文件来验证C/C++实现的算法
-length = size(dpfs_new)
+length = size(dpfs_new);
 
 for i = 1:length(1)
-    [mean_temp,variance_temp,stdvariance_temp,hpf_dpfs_temp,water_flag_inmatlab_temp] = water_detect(dpfs_new(i),fly_state_now(i));
+    [mean_temp,variance_temp,stdvariance_temp,hpf_dpfs_temp,water_flag_inmatlab_temp,fly_state_change_temp] = water_detect(time_infact(i),fly_state_now(i),dpfs_new(i));
     mean_arr(i) = mean_temp;
     variance_arr(i) = variance_temp;
     stdvariance_arr(i) = stdvariance_temp;
     hpf_dpfs_arr(i) = hpf_dpfs_temp;
     water_flag_inmatlab_arr(i) = water_flag_inmatlab_temp;
+    waterdetectflag_output.fly_state_change(i)= fly_state_change_temp;
 end
 
 figure
-subplot(2,1,1)
+subplot(3,1,1)
 plot(time_infact,dpfs_new,'b') 
 xlabel('t(s)')
 ylabel('dpfs input')
-subplot(2,1,2)
+
+subplot(3,1,2)
 plot(time_infact,hpf_dpfs_arr,'b')
+xlabel('t(s)')
+ylabel('hpf dpfs')
+
+subplot(3,1,3)
+plot(time_infact,waterdetectflag_output.fly_state_change,'r')
 xlabel('t(s)')
 ylabel('hpf dpfs')
 
@@ -47,6 +57,12 @@ xlabel('t(s)')
 ylabel('variance')
 subplot(3,1,3)
 plot(time_infact,stdvariance_arr,'b') 
+hold on;
+limit = 0.3;
+for i= 1:length
+    line_arr(i) = limit;
+end
+plot(time_infact,line_arr,'r') 
 xlabel('t(s)')
 ylabel('stdvariance')
 

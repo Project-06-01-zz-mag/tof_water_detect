@@ -10,8 +10,9 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]) {
     waterdetectflag_t  waterdetectflag_output{};
     static waterdetectrawdata_t waterdetectrawdata_input{};
 
-    waterdetectrawdata_input.dpfs_new = (double)mxGetScalar(prhs[0]);
+    waterdetectrawdata_input.time_input = (double)mxGetScalar(prhs[0]);
     waterdetectrawdata_input.fly_state_now = (bool)mxGetScalar(prhs[1]);
+    waterdetectrawdata_input.dpfs_new = (double)mxGetScalar(prhs[2]);
 
     waterdetectflag_output = water_detect_.tof_water_detect(&waterdetectrawdata_input);
 
@@ -20,5 +21,6 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]) {
     plhs[2] = mxCreateDoubleScalar((double)waterdetectflag_output.stdvariance);
     plhs[3] = mxCreateDoubleScalar((double)waterdetectflag_output.hpf_dpfs);
     plhs[4] = mxCreateDoubleScalar((bool)waterdetectflag_output.waterflag);
+    plhs[5] = mxCreateDoubleScalar((bool)waterdetectflag_output.fly_state_change);
     //mexPrintf("输出结果个数：%d\n",nlhs);
 }
