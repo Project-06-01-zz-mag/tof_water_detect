@@ -4,13 +4,12 @@ mex -setup C++
 %% 编译源文件，输出文件名为water_detect，扩展名基于平台，windows下为mexw64
 mex -R2018a 8mextest\3_water_detect\mex_c_to_m.cpp 8mextest\3_water_detect\water_detect_ffc.cpp -output water_detect
 %% 二进制文件调用进行混合编程
-a = 3;
-b = 1;
 
 %% 原始数据导入
 filename = '6python/1scipe/ffc.1.csv';
 delimiterIn = ' '; % 看到空格分开
 ffc_log_struct = importdata(filename,delimiterIn);
+time_infact = ffc_log_struct.data(:,1);
 fly_state_now = ffc_log_struct.data(:,2);
 dpfs_new = ffc_log_struct.data(:,3);
 water_flag_infly = ffc_log_struct.data(:,4);
@@ -29,30 +28,37 @@ end
 
 figure
 subplot(2,1,1)
-plot(dpfs_new,'b') 
-ylabel('dpfs_new')
+plot(time_infact,dpfs_new,'b') 
+xlabel('t(s)')
+ylabel('dpfs input')
 subplot(2,1,2)
-plot(hpf_dpfs_arr,'b') 
-ylabel('hpf_dpfs_arr')
+plot(time_infact,hpf_dpfs_arr,'b')
+xlabel('t(s)')
+ylabel('hpf dpfs')
 
 figure
 subplot(3,1,1)
-plot(mean_arr,'b') 
-ylabel('mean_arr')
+plot(time_infact,mean_arr,'b') 
+xlabel('t(s)')
+ylabel('mean')
 subplot(3,1,2)
-plot(variance_arr,'b') 
-ylabel('variance_arr')
+plot(time_infact,variance_arr,'b') 
+xlabel('t(s)')
+ylabel('variance')
 subplot(3,1,3)
-plot(stdvariance_arr,'b') 
-ylabel('stdvariance_arr')
+plot(time_infact,stdvariance_arr,'b') 
+xlabel('t(s)')
+ylabel('stdvariance')
 
 figure
 subplot(2,1,1)
-plot(water_flag_infly,'b') 
-ylabel('water_flag_infly')
+plot(time_infact,water_flag_infly,'b') 
+xlabel('t(s)')
+ylabel('water flag infly')
 subplot(2,1,2)
-plot(water_flag_inmatlab_arr,'b') 
-ylabel('water_flag_inmatlab_arr')
+plot(time_infact,water_flag_inmatlab_arr,'b') 
+xlabel('t(s)')
+ylabel('water flag output')
 
 %% 完全结束后释放内存
 clear water_detect
