@@ -16,8 +16,20 @@ if(waterdetectrawdata->fly_state_last != waterdetectrawdata->fly_state_now)
     waterdetectflag_temp.fly_state_change = true;
     tofdpfsFilter_.reset(0.f);
     cnt_for_stdvariance = 0;
+    waterdetectrawdata->time_state_change = waterdetectrawdata->time_input;
 }
 waterdetectrawdata->fly_state_last  = waterdetectrawdata->fly_state_now;
+
+if( waterdetectrawdata->fly_state_now == false )
+{
+    waterdetectrawdata->dpfs_new = 0;
+    dpfs_old =0 ;
+}
+
+if((waterdetectrawdata->time_input - waterdetectrawdata->time_state_change) < 2.0f)
+{
+    water_cnt = 0;
+}
 
 if (waterdetectrawdata->dpfs_new < -70 || waterdetectrawdata->dpfs_new > -5) {
     waterdetectrawdata->dpfs_new = dpfs_old;
@@ -25,11 +37,6 @@ if (waterdetectrawdata->dpfs_new < -70 || waterdetectrawdata->dpfs_new > -5) {
     dpfs_old = waterdetectrawdata->dpfs_new;
 }
 
-if( waterdetectrawdata->fly_state_now == false)
-{
-    waterdetectrawdata->dpfs_new = 0;
-    dpfs_old =0 ;
-}
 waterdetectflag_temp.hpf_dpfs = tofdpfsFilter_.filter(waterdetectrawdata->dpfs_new);
 
 if (cnt_for_stdvariance != WAT_WIN_SIZE - 1) {

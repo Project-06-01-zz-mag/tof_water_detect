@@ -21,7 +21,7 @@ water_flag_infly = ffc_log_struct.data(:,4);
 length = size(dpfs_new);
 
 for i = 1:length(1)
-    [mean_temp,variance_temp,stdvariance_temp,hpf_dpfs_temp,water_flag_inmatlab_temp,fly_state_change_temp] = water_detect(fly_state_now(i),dpfs_new(i));
+    [mean_temp,variance_temp,stdvariance_temp,hpf_dpfs_temp,water_flag_inmatlab_temp,fly_state_change_temp] = water_detect(time_infact(i),fly_state_now(i),dpfs_new(i));
     mean_arr(i) = mean_temp;
     variance_arr(i) = variance_temp;
     stdvariance_arr(i) = stdvariance_temp;
