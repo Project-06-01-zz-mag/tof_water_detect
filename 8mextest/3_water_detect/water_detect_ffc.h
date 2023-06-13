@@ -99,6 +99,8 @@ typedef struct waterdetectrawdata_s {
 bool fly_state_now;
 bool fly_state_last = false;
 float dpfs_new;
+double time_input;
+double time_state_change;
 } waterdetectrawdata_t;
 
 
