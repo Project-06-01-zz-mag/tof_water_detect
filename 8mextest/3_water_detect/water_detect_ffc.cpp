@@ -5,6 +5,8 @@
     static float dpfs_date_cache[WAT_WIN_SIZE] = {0};
     static uint16_t cnt_for_stdvariance = 0;
     static uint16_t water_cnt = 0;
+    static uint16_t grould_cnt = 0;
+    static bool water_flag_last = false;
 
     waterdetectflag_t waterdetectflag_temp;
 
@@ -56,20 +58,38 @@
     }
     waterdetectflag_temp.stdvariance = sqrt(waterdetectflag_temp.variance);
 
-    //judge water flag
-    if (waterdetectflag_temp.stdvariance > STAND_DEV_VALUE_THRESHOLD) {
-      if (water_cnt < 1000) {
-        water_cnt++;
+    waterdetectflag_temp.waterflag = water_flag_last;
+    if(waterdetectflag_temp.waterflag  == false)
+    {
+      //judge water flag
+      if (waterdetectflag_temp.stdvariance > WATER_THRESHOLD) {
+        if (water_cnt < 1000) {
+          water_cnt++;
+        }
+      } else {
+        water_cnt = 0;
       }
-    } else {
-      water_cnt = 0;
+
+      if (water_cnt > WATER_CNT_THRESHOLD) {
+        waterdetectflag_temp.waterflag = true;
+      }
+    }
+    else
+    {
+      if (waterdetectflag_temp.stdvariance < GROULD_THRESHOLD) {
+        if (grould_cnt < 1000) {
+          grould_cnt++;
+        }
+      } else {
+        grould_cnt = 0;
+      }
+
+      if (grould_cnt > GROULD_CNT_THRESHOLD) {
+        waterdetectflag_temp.waterflag = false;
+      }
     }
 
-    if (water_cnt > WATER_CNT_THRESHOLD) {
-      waterdetectflag_temp.waterflag = true;
-    } else {
-      waterdetectflag_temp.waterflag = false;
-    }
+    water_flag_last = waterdetectflag_temp.waterflag ;
 
     return waterdetectflag_temp;
   }
