@@ -4,7 +4,7 @@ import sys
 filename = "ffc.1.log"
 current_dir = os.path.dirname(os.path.abspath(__file__))
 file_path = os.path.join(current_dir, filename)
-specific_string = "[I|ap]:[ADSP]tof_hpf"
+specific_string = "[I|ap]:[ADSP]tof_water"
 
 if len(sys.argv) == 3: #e.g. python3 save_specificstr_line.py xxx.log xxx
     filename = sys.argv[1]

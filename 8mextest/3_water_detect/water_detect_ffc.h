@@ -109,7 +109,7 @@ class TofHpfFilter : public DigiFilterBase<float> {
 class water_detect
 {
 public:
-  waterdetectflag_t tof_water_detect(waterdetectrawdata_t *waterdetectrawdata);
+  waterdetectflag_t tof_water_detect(waterdetectrawdata_t waterdetectrawdata);
 private:
   TofHpfFilter tofdpfsFilter_;
 };
