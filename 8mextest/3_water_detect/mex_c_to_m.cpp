@@ -7,12 +7,13 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]) {
     //mexPrintf("输入参数个数：%d\n",nrhs);
 
     static water_detect water_detect_{};
-    waterdetectrawdata_t waterdetectrawdata_input{};
-    static waterdetectflag_t waterdetectflag_output{};
+    tof_waterdetectflag_input_t waterdetectrawdata_input{};
+    static tof_waterdetectflag_output_t waterdetectflag_output{};
 
     waterdetectrawdata_input.time_input = (double)mxGetScalar(prhs[0]);
     waterdetectrawdata_input.fly_state_now = (bool)mxGetScalar(prhs[1]);
     waterdetectrawdata_input.dpfs_new = (double)mxGetScalar(prhs[2]);
+    waterdetectrawdata_input.fly_height_last = (double)mxGetScalar(prhs[3]);
 
     waterdetectflag_output = water_detect_.tof_water_detect(waterdetectrawdata_input);
 

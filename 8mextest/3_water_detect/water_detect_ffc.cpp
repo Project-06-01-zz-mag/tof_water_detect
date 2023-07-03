@@ -1,6 +1,6 @@
 #include "water_detect_ffc.h"
 
-  waterdetectflag_t water_detect::tof_water_detect(waterdetectrawdata_t waterdetectrawdata) {
+   tof_waterdetectflag_output_t water_detect::tof_water_detect(tof_waterdetectflag_input_t waterdetectrawdata) {
     static float dpfs_old = 0;
     static float dpfs_date_cache[WAT_WIN_SIZE] = {0};
     static uint16_t cnt_for_stdvariance = 0;
@@ -10,7 +10,7 @@
     static bool fly_state_last  = false;
     static double time_state_change = 0;
 
-    waterdetectflag_t waterdetectflag_temp;
+    tof_waterdetectflag_output_t waterdetectflag_temp;
 
     // when fly state change ,reset filter and cache of stdvariance
     if(fly_state_last != waterdetectrawdata.fly_state_now)
@@ -26,7 +26,13 @@
     {
         water_cnt = 0;
     }
-    // remove outlier value
+
+    //if fly close the ground ,the water flag will error 
+    if(waterdetectrawdata.fly_height_last<0.3f && waterdetectrawdata.fly_height_last>0)
+    {
+        water_cnt = 0;
+    }
+
     if (waterdetectrawdata.dpfs_new < -70 || waterdetectrawdata.dpfs_new > -5) {
       waterdetectrawdata.dpfs_new = dpfs_old;
     } else {
