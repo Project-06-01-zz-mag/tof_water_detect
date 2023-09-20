@@ -82,11 +82,11 @@ class TofHpfFilter : public DigiFilterBase<float> {
   TofHpfFilter() { init(N, num, den); }
 };
 
-#define WAT_WIN_SIZE 30
-#define WATER_THRESHOLD 0.3
-#define WATER_CNT_THRESHOLD 30
-#define GROULD_THRESHOLD 0.2
-#define GROULD_CNT_THRESHOLD 30
+static constexpr uint16_t WAT_WIN_SIZE = 30;
+static constexpr float WATER_THRESHOLD = 0.3;
+static constexpr uint16_t WATER_CNT_THRESHOLD = 30;
+static constexpr float GROULD_THRESHOLD = 0.1;
+static constexpr uint16_t GROULD_CNT_THRESHOLD = 30;
 
 typedef struct {
   bool fly_state_now;
@@ -104,7 +104,7 @@ typedef struct {
   bool waterflag = false;
 } tof_waterdetectflag_output_t;
 
-class water_detect {
+class TofProcess {
  public:
   tof_waterdetectflag_output_t tof_water_detect(tof_waterdetectflag_input_t waterdetectrawdata);
 

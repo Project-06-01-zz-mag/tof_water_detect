@@ -6,7 +6,7 @@
 void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]) {
     //mexPrintf("输入参数个数：%d\n",nrhs);
 
-    static water_detect water_detect_{};
+    static TofProcess water_detect_{};
     tof_waterdetectflag_input_t waterdetectrawdata_input{};
     static tof_waterdetectflag_output_t waterdetectflag_output{};
 
