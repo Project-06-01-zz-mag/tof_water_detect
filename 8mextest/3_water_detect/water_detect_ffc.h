@@ -82,32 +82,32 @@ class TofHpfFilter : public DigiFilterBase<float> {
   TofHpfFilter() { init(N, num, den); }
 };
 
-  #define WAT_WIN_SIZE 30
-  #define WATER_THRESHOLD 0.3
-  #define WATER_CNT_THRESHOLD 30
-  #define GROULD_THRESHOLD 0.2
-  #define GROULD_CNT_THRESHOLD 30
+#define WAT_WIN_SIZE 30
+#define WATER_THRESHOLD 0.3
+#define WATER_CNT_THRESHOLD 30
+#define GROULD_THRESHOLD 0.2
+#define GROULD_CNT_THRESHOLD 30
 
-  typedef struct {
-    bool   fly_state_now;
-    float  dpfs_new;
-    double time_input;
-    float  fly_height_last;
-  } tof_waterdetectflag_input_t;
+typedef struct {
+  bool fly_state_now;
+  float dpfs_new;
+  double time_input;
+  float fly_height_last;
+} tof_waterdetectflag_input_t;
 
-  typedef struct {
-    bool  fly_state_change = false;
-    float hpf_dpfs;
-    float mean = 0;
-    float variance = 0;
-    float stdvariance = 0;
-    bool  waterflag = false;
-  } tof_waterdetectflag_output_t;
-  
-class water_detect
-{
-public:
+typedef struct {
+  bool fly_state_change = false;
+  float hpf_dpfs;
+  float mean = 0;
+  float variance = 0;
+  float stdvariance = 0;
+  bool waterflag = false;
+} tof_waterdetectflag_output_t;
+
+class water_detect {
+ public:
   tof_waterdetectflag_output_t tof_water_detect(tof_waterdetectflag_input_t waterdetectrawdata);
-private:
+
+ private:
   TofHpfFilter tofdpfsFilter_;
 };
