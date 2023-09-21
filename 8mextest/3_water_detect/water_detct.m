@@ -9,14 +9,19 @@ mex -R2018a 8mextest\3_water_detect\mex_c_to_m.cpp 8mextest\3_water_detect\water
 %% 二进制文件调用进行混合编程
 
 %% 原始数据导入
-filename = '6python/0data/8李航停车库炸鸡触发水面标识/ffc.1.csv';
+filename = '6python/0data/8李航停车库炸鸡触发水面标识/new_algorithm_date';
 delimiterIn = ' '; % 看到空格分开
-ffc_log_struct = importdata(filename,delimiterIn);
-input.raw.time_infact = ffc_log_struct(:,1);
-input.raw.fly_state_now = ffc_log_struct(:,2);
-input.raw.dpfs_new = ffc_log_struct(:,3);
-output.raw.water_flag_infly = ffc_log_struct(:,4);
-input.raw.fly_higt = ffc_log_struct(:,5);
+ffc_log_struct = importdata(filename, delimiterIn);
+
+input.raw.update_t = ffc_log_struct(:, 1);
+input.raw.phase_tof = ffc_log_struct(:, 2);
+input.raw.tof_valid = ffc_log_struct(:, 3);
+
+input.raw.time_infact = ffc_log_struct(:, 4);
+input.raw.fly_state_now = ffc_log_struct(:, 5);
+input.raw.dpfs_new = ffc_log_struct(:, 6);
+input.raw.fly_higt = ffc_log_struct(:, 7);
+output.raw.water_flag_infly = ffc_log_struct(:, 8);
 
 % 抽取实际的变化时刻
 length = size(input.raw.time_infact);
@@ -32,6 +37,11 @@ end
 % 抽取实际的运算数据
 length_extract = size(extract_times);
 for i = 1:length_extract(2)
+
+    input.update_t(i) = input.raw.update_t(extract_times(i));
+    input.phase_tof(i) = input.raw.phase_tof(extract_times(i));
+    input.tof_valid(i) = input.raw.tof_valid(extract_times(i));
+
     input.time_infact(i) = input.raw.time_infact(extract_times(i));
     input.fly_state_now(i) = input.raw.fly_state_now(extract_times(i));
     input.dpfs_new(i) = input.raw.dpfs_new(extract_times(i));
@@ -42,8 +52,11 @@ end
 
 % 调用编译出的二进制文件来验证C/C++实现的算法
 for i = 1:length_extract(2)
-    [mean_temp,variance_temp,stdvariance_temp,hpf_dpfs_temp,water_flag_inmatlab_temp,fly_state_change_temp] = ...
+    [mean_temp,variance_temp,stdvariance_temp,hpf_dpfs_temp,water_flag_inmatlab_temp,fly_state_change_temp,tof_speed_temp] = ...
     water_detect(...
+    input.update_t(i),...
+    input.phase_tof(i),...
+    input.tof_valid(i),...
     input.time_infact(i),...
     input.fly_state_now(i),...
     input.dpfs_new(i),...
@@ -55,10 +68,11 @@ for i = 1:length_extract(2)
     output.stdvariance_arr(i) = stdvariance_temp;
     output.hpf_dpfs_arr(i) = hpf_dpfs_temp;
     output.water_flag_inmatlab(i) = water_flag_inmatlab_temp;
-    output.fly_state_change(i)= fly_state_change_temp;
+    output.fly_state_change(i) = fly_state_change_temp;
+    output.matlab.tof_speed(i) = tof_speed_temp;
 end
 
-figure_size = 4
+figure_size = 5
 
 figure
 subplot(figure_size,1,1)
@@ -94,6 +108,12 @@ plot(input.time_infact,input.fly_higt,'r')
 hold on
 xlabel('t(s)')
 legend('飞机高度')
+
+subplot(figure_size,1,5)
+plot(input.time_infact,output.matlab.tof_speed,'b') 
+hold on
+xlabel('t(s)')
+legend('tof speed')
 
 %% 完全结束后释放内存
 clear water_detect

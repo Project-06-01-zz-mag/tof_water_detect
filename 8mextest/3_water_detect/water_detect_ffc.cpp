@@ -1,5 +1,54 @@
 #include "water_detect_ffc.h"
 
+tof_diff_output_t TofProcess::tof_differential(tof_diff_input_t input) {
+  tof_diff_output_t tof_diff_output_;
+  static float last_distance = 0;
+  static float last_time = 0;
+  static double last_cancel_times = 0;
+
+  static uint16_t last_phase = 0;
+
+  const float coefficient_phase_to_distance = 0.22872;
+
+  const float abnormal_down_speed = 2.0;  // max down speed is 2m/s in normal case；
+  static uint16_t abnormal_down_count = 0;
+
+  tof_diff_output_.cancel_waterflag_times = last_cancel_times;
+  tof_diff_output_.tof_speed = 0;
+
+  if (input.tof_valid == false || input.phase_tof_raw > 6000) {
+    last_distance = 0;
+    last_time = 0;
+    last_cancel_times = 0;
+    tof_diff_output_.cancel_waterflag_times = 0;
+    tof_diff_output_.tof_speed = 0;
+    last_phase = 0;
+    return tof_diff_output_;
+  }
+
+  int phase_diff = (int)(last_phase - input.phase_tof_raw);
+  float hight_diff = phase_diff * coefficient_phase_to_distance / 1000;
+  float diff_time = input.update_t - last_time;
+
+  if (diff_time > 0.04 || diff_time < 0.02) {
+    diff_time = 0.03;
+  }
+
+  if (phase_diff > 0) {
+    float speed_temp = hight_diff / diff_time;
+    if (speed_temp > abnormal_down_speed) {
+      tof_diff_output_.cancel_waterflag_times = input.update_t;  // update time
+    }
+    tof_diff_output_.tof_speed = speed_temp;
+  }
+
+  last_cancel_times = tof_diff_output_.cancel_waterflag_times;
+  last_time = input.update_t;
+  last_phase = input.phase_tof_raw;
+
+  return tof_diff_output_;
+}
+
 tof_waterdetectflag_output_t TofProcess::tof_water_detect(tof_waterdetectflag_input_t waterdetectrawdata) {
   static float dpfs_old = 0;
   static float dpfs_date_cache[WAT_WIN_SIZE] = {0};
@@ -85,6 +134,13 @@ tof_waterdetectflag_output_t TofProcess::tof_water_detect(tof_waterdetectflag_in
       waterdetectflag_temp.waterflag = false;
     }
   }
+
+  if ((waterdetectrawdata.time_input - waterdetectrawdata.cancel_waterflag) < CANCEL_DELAY_TIME) {
+    water_cnt = 0;
+    waterdetectflag_temp.waterflag = false;
+  }
+
+  waterdetectflag_temp.hpf_dpfs =  waterdetectrawdata.cancel_waterflag;
 
   // if fly close the ground ,the water flag will error
   if (waterdetectrawdata.fly_height_last < 0.3f && waterdetectrawdata.fly_height_last > 0) {
