@@ -85,7 +85,7 @@ class TofHpfFilter : public DigiFilterBase<float> {
 static constexpr uint16_t WAT_WIN_SIZE = 30;
 static constexpr float WATER_THRESHOLD = 0.3;
 static constexpr uint16_t WATER_CNT_THRESHOLD = 30;
-static constexpr float GROULD_THRESHOLD = 0.1;
+static constexpr float GROULD_THRESHOLD = 0.2;
 static constexpr uint16_t GROULD_CNT_THRESHOLD = 30;
 
 typedef struct {

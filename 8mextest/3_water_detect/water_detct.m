@@ -4,24 +4,44 @@ close all
 
 setenv('MW_MINGW64_LOC', 'C:\mingw-64')
 mex -setup C++
-%% ç¼–è¯‘æºæ–‡ä»¶ï¼Œè¾“å‡ºæ–‡ä»¶åä¸ºwater_detectï¼Œæ‰©å±•ååŸºäºå¹³å°ï¼Œwindowsä¸‹ä¸ºmexw64
+%% ±àÒëÔ´ÎÄ¼ş£¬Êä³öÎÄ¼şÃûÎªwater_detect£¬À©Õ¹Ãû»ùÓÚÆ½Ì¨£¬windowsÏÂÎªmexw64
 mex -R2018a 8mextest\3_water_detect\mex_c_to_m.cpp 8mextest\3_water_detect\water_detect_ffc.cpp -output water_detect
-%% äºŒè¿›åˆ¶æ–‡ä»¶è°ƒç”¨è¿›è¡Œæ··åˆç¼–ç¨‹
+%% ¶ş½øÖÆÎÄ¼şµ÷ÓÃ½øĞĞ»ìºÏ±à³Ì
 
-%% åŸå§‹æ•°æ®å¯¼å…¥
-filename = '6python/1scipe/ffc.1.csv';
-delimiterIn = ' '; % çœ‹åˆ°ç©ºæ ¼åˆ†å¼€
+%% Ô­Ê¼Êı¾İµ¼Èë
+filename = '6python/0data/8Àîº½Í£³µ¿âÕ¨¼¦´¥·¢Ë®Ãæ±êÊ¶/ffc.1.csv';
+delimiterIn = ' '; % ¿´µ½¿Õ¸ñ·Ö¿ª
 ffc_log_struct = importdata(filename,delimiterIn);
-input.time_infact = ffc_log_struct.data(:,1);
-input.fly_state_now = ffc_log_struct.data(:,2);
-input.dpfs_new = ffc_log_struct.data(:,3);
-output_log.water_flag_infly = ffc_log_struct.data(:,4);
-input.fly_higt = ffc_log_struct.data(:,5);
+input.raw.time_infact = ffc_log_struct(:,1);
+input.raw.fly_state_now = ffc_log_struct(:,2);
+input.raw.dpfs_new = ffc_log_struct(:,3);
+output.raw.water_flag_infly = ffc_log_struct(:,4);
+input.raw.fly_higt = ffc_log_struct(:,5);
 
-% è°ƒç”¨ç¼–è¯‘å‡ºçš„äºŒè¿›åˆ¶æ–‡ä»¶æ¥éªŒè¯C/C++å®ç°çš„ç®—æ³•
-length = size(input.dpfs_new);
+% ³éÈ¡Êµ¼ÊµÄ±ä»¯Ê±¿Ì
+length = size(input.raw.time_infact);
+j = 1;
+extract_times(j) = 1;
+for i= 1:length-1
+    if((input.raw.time_infact(i+1) - input.raw.time_infact(i)) > 0)
+        j = j +1;
+        extract_times(j) = i;
+    end
+end
 
-for i = 1:length(1)
+% ³éÈ¡Êµ¼ÊµÄÔËËãÊı¾İ
+length_extract = size(extract_times);
+for i = 1:length_extract(2)
+    input.time_infact(i) = input.raw.time_infact(extract_times(i));
+    input.fly_state_now(i) = input.raw.fly_state_now(extract_times(i));
+    input.dpfs_new(i) = input.raw.dpfs_new(extract_times(i));
+    output.water_flag_infly(i) = output.raw.water_flag_infly(extract_times(i));
+    input.fly_higt(i) = input.raw.fly_higt(extract_times(i));
+end
+
+
+% µ÷ÓÃ±àÒë³öµÄ¶ş½øÖÆÎÄ¼şÀ´ÑéÖ¤C/C++ÊµÏÖµÄËã·¨
+for i = 1:length_extract(2)
     [mean_temp,variance_temp,stdvariance_temp,hpf_dpfs_temp,water_flag_inmatlab_temp,fly_state_change_temp] = ...
     water_detect(...
     input.time_infact(i),...
@@ -47,32 +67,33 @@ xlabel('t(s)')
 ylabel('dpfs')
 hold on
 plot(input.time_infact,output.hpf_dpfs_arr,'r')
-legend('dpfsæ»¤æ³¢å‰','dpfsæ»¤æ³¢å')
+legend('dpfsÂË²¨Ç°','dpfsÂË²¨ºó')
 
 subplot(figure_size,1,2)
 plot(input.time_infact,output.stdvariance_arr,'b') 
 hold on;
 limit = 0.3;
-for i= 1:length
+for i= 1:length_extract(2)
     line_arr(i) = limit;
 end
 plot(input.time_infact,line_arr,'r') 
+hold on;
 xlabel('t(s)')
 ylabel('stdvariance')
-legend('å®æ—¶æ ‡å‡†å·®','æ ‡å‡†å·®é˜ˆå€¼')
+legend('ÊµÊ±±ê×¼²î','±ê×¼²îãĞÖµ')
 
 subplot(figure_size,1,3)
-plot(input.time_infact,output_log.water_flag_infly,'b') 
+plot(input.time_infact,output.water_flag_infly,'b') 
 hold on
 plot(input.time_infact,output.water_flag_inmatlab*0.5,'r') 
 xlabel('t(s)')
-legend('ä¼˜åŒ–å‰æ°´é¢æ ‡å¿—ä½','ä¼˜åŒ–åæ°´é¢æ ‡å¿—ä½')
+legend('ÓÅ»¯Ç°Ë®Ãæ±êÖ¾Î»','ÓÅ»¯ºóË®Ãæ±êÖ¾Î»')
 
 subplot(figure_size,1,4)
 plot(input.time_infact,input.fly_higt,'r') 
 hold on
 xlabel('t(s)')
-legend('é£æœºé«˜åº¦')
+legend('·É»ú¸ß¶È')
 
-%% å®Œå…¨ç»“æŸåé‡Šæ”¾å†…å­˜
+%% ÍêÈ«½áÊøºóÊÍ·ÅÄÚ´æ
 clear water_detect
