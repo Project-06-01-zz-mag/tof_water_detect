@@ -140,8 +140,6 @@ tof_waterdetectflag_output_t TofProcess::tof_water_detect(tof_waterdetectflag_in
     waterdetectflag_temp.waterflag = false;
   }
 
-  waterdetectflag_temp.hpf_dpfs =  waterdetectrawdata.cancel_waterflag;
-
   // if fly close the ground ,the water flag will error
   if (waterdetectrawdata.fly_height_last < 0.3f && waterdetectrawdata.fly_height_last > 0) {
     waterdetectflag_temp.waterflag = false;
