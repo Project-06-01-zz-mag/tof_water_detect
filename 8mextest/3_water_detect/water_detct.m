@@ -9,7 +9,8 @@ mex -R2018a 8mextest\3_water_detect\mex_c_to_m.cpp 8mextest\3_water_detect\water
 %% 二进制文件调用进行混合编程
 
 %% 原始数据导入
-filename = '6python/0data/8李航停车库炸鸡触发水面标识/2改写为深度数据进行判断';
+% filename = '6python/0data/8李航停车库炸鸡触发水面标识/2改写为深度数据进行判断';
+filename = '6python/0data/9李航湖边测试37次/2改写为深度数据进行判断';
 delimiterIn = ' '; % 看到空格分开
 ffc_log_struct = importdata(filename, delimiterIn);
 
@@ -85,7 +86,7 @@ legend('dpfs滤波前','dpfs滤波后')
 subplot(figure_size,1,2)
 plot(input.time_infact,output.stdvariance_arr,'b') 
 hold on;
-limit = 0.3;
+limit = 0.2;
 for i= 1:length_extract(2)
     line_arr(i) = limit;
 end

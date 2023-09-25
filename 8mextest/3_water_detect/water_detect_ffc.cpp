@@ -126,10 +126,10 @@ tof_waterdetectflag_output_t TofProcess::tof_water_detect(tof_waterdetectflag_in
     }
   }
 
-  if ((waterdetectrawdata.time_input - waterdetectrawdata.cancel_waterflag) < CANCEL_DELAY_TIME) {
-    water_cnt = 0;
-    waterdetectflag_temp.waterflag = false;
-  }
+  // if ((waterdetectrawdata.time_input - waterdetectrawdata.cancel_waterflag) < CANCEL_DELAY_TIME) {
+  //   water_cnt = 0;
+  //   waterdetectflag_temp.waterflag = false;
+  // }
 
   // if fly close the ground ,the water flag will error
   if (waterdetectrawdata.fly_height_last < 0.3f && waterdetectrawdata.fly_height_last > 0) {
