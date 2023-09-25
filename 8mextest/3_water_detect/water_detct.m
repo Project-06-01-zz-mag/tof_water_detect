@@ -9,19 +9,19 @@ mex -R2018a 8mextest\3_water_detect\mex_c_to_m.cpp 8mextest\3_water_detect\water
 %% 二进制文件调用进行混合编程
 
 %% 原始数据导入
-filename = '6python/0data/9李航湖边测试37次/1_5次3次失败';
+filename = '6python/0data/8李航停车库炸鸡触发水面标识/2改写为深度数据进行判断';
 delimiterIn = ' '; % 看到空格分开
 ffc_log_struct = importdata(filename, delimiterIn);
 
 input.raw.update_t = ffc_log_struct(:, 1);
-input.raw.phase_tof = ffc_log_struct(:, 2);
-input.raw.tof_valid = ffc_log_struct(:, 3);
+input.raw.distance = ffc_log_struct(:, 2);
+% input.raw.tof_valid = ffc_log_struct(:, 3);
 
-input.raw.time_infact = ffc_log_struct(:, 4);
-input.raw.fly_state_now = ffc_log_struct(:, 5);
-input.raw.dpfs_new = ffc_log_struct(:, 6);
-input.raw.fly_higt = ffc_log_struct(:, 7);
-output.raw.water_flag_infly = ffc_log_struct(:, 8);
+input.raw.time_infact = ffc_log_struct(:, 3);
+input.raw.fly_state_now = ffc_log_struct(:, 4);
+input.raw.dpfs_new = ffc_log_struct(:, 5);
+input.raw.fly_higt = ffc_log_struct(:, 6);
+output.raw.water_flag_infly = ffc_log_struct(:, 7);
 
 % 抽取实际的变化时刻
 length = size(input.raw.time_infact);
@@ -39,8 +39,8 @@ length_extract = size(extract_times);
 for i = 1:length_extract(2)
 
     input.update_t(i) = input.raw.update_t(extract_times(i));
-    input.phase_tof(i) = input.raw.phase_tof(extract_times(i));
-    input.tof_valid(i) = input.raw.tof_valid(extract_times(i));
+    input.distance(i) = input.raw.distance(extract_times(i));
+    % input.tof_valid(i) = input.raw.tof_valid(extract_times(i));
 
     input.time_infact(i) = input.raw.time_infact(extract_times(i));
     input.fly_state_now(i) = input.raw.fly_state_now(extract_times(i));
@@ -55,8 +55,7 @@ for i = 1:length_extract(2)
     [mean_temp,variance_temp,stdvariance_temp,hpf_dpfs_temp,water_flag_inmatlab_temp,fly_state_change_temp,tof_speed_temp] = ...
     water_detect(...
     input.update_t(i),...
-    input.phase_tof(i),...
-    input.tof_valid(i),...
+    input.distance(i),...
     input.time_infact(i),...
     input.fly_state_now(i),...
     input.dpfs_new(i),...

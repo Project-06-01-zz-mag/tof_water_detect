@@ -13,16 +13,15 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]) {
     static tof_diff_output_t tof_diff_output_{};
 
     tof_diff_input_.update_t = (double)mxGetScalar(prhs[0]);
-    tof_diff_input_.phase_tof_raw = (uint16_t)mxGetScalar(prhs[1]);
-    tof_diff_input_.tof_valid = (bool)mxGetScalar(prhs[2]);
+    tof_diff_input_.tof_distance = (float)mxGetScalar(prhs[1]);
 
     tof_diff_output_ = water_detect_.tof_differential(tof_diff_input_); 
 
     waterdetectrawdata_input.cancel_waterflag = (double)tof_diff_output_.cancel_waterflag_times;
-    waterdetectrawdata_input.time_input = (double)mxGetScalar(prhs[3]);
-    waterdetectrawdata_input.fly_state_now = (bool)mxGetScalar(prhs[4]);
-    waterdetectrawdata_input.dpfs_new = (double)mxGetScalar(prhs[5]);
-    waterdetectrawdata_input.fly_height_last = (double)mxGetScalar(prhs[6]);
+    waterdetectrawdata_input.time_input = (double)mxGetScalar(prhs[2]);
+    waterdetectrawdata_input.fly_state_now = (bool)mxGetScalar(prhs[3]);
+    waterdetectrawdata_input.dpfs_new = (double)mxGetScalar(prhs[4]);
+    waterdetectrawdata_input.fly_height_last = (double)mxGetScalar(prhs[5]);
     
     waterdetectflag_output = water_detect_.tof_water_detect(waterdetectrawdata_input);
 

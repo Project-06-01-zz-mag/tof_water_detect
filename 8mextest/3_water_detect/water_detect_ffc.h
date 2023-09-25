@@ -108,8 +108,7 @@ typedef struct {
 
 typedef struct {
   double update_t;
-  uint16_t phase_tof_raw;
-  bool tof_valid;
+  float tof_distance;
 } tof_diff_input_t;
 
 typedef struct {
