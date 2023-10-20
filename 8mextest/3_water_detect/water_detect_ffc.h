@@ -87,14 +87,12 @@ static constexpr float WATER_THRESHOLD = 0.2;
 static constexpr uint16_t WATER_CNT_THRESHOLD = 50;
 static constexpr float GROULD_THRESHOLD = 0.1;
 static constexpr uint16_t GROULD_CNT_THRESHOLD = 30;
-static constexpr float CANCEL_DELAY_TIME = 0.8;
 
 typedef struct {
   bool fly_state_now;
   float dpfs_new;
   double time_input;
   float fly_height_last;
-  double cancel_waterflag;
 } tof_waterdetectflag_input_t;
 
 typedef struct {
@@ -106,20 +104,9 @@ typedef struct {
   bool waterflag = false;
 } tof_waterdetectflag_output_t;
 
-typedef struct {
-  double update_t;
-  float tof_distance;
-} tof_diff_input_t;
-
-typedef struct {
-  double cancel_waterflag_times;
-  float tof_speed;
-} tof_diff_output_t;
-
 class TofProcess {
  public:
   tof_waterdetectflag_output_t tof_water_detect(tof_waterdetectflag_input_t waterdetectrawdata);
-  tof_diff_output_t tof_differential(tof_diff_input_t input);
 
  private:
   TofHpfFilter tofdpfsFilter_;
